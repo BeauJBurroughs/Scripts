@@ -1,0 +1,32 @@
+#!/bin/bash
+# to run [. setup] without brackets
+
+export IP=10.10.10.210                          #enter box IP
+export HOME=/home/kali/hackthebox/Reel2         #enter box Name
+
+
+read -p "Press [Enter] key if this is first run"
+read -p "Are you sure this is the first run?"
+## Bash add pause prompt for 5 seconds ##
+read -t 5 -p "I am going to wait for 5 seconds only ..."
+#only run if first time or will lose all work
+mkdir $HOME
+mkdir $HOME/nmap
+mkdir $HOME/buster
+mkdir $HOME/www
+touch $HOME/notes
+#script = autostabalize_shell script 
+cp /home/kali/script /$HOME/
+
+cp /home/kali/Downloads/privilege-escalation-awesome-scripts-suite/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe /$HOME/www
+cp /home/kali/Downloads/privilege-escalation-awesome-scripts-suite/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe /$HOME/www
+cp /home/kali/Downloads/privilege-escalation-awesome-scripts-suite/winPEAS/winPEASbat/winPEAS.bat /$HOME/www
+cp /home/kali/Downloads/privilege-escalation-awesome-scripts-suite/linPEAS/linpeas.sh /$HOME/www/
+echo '#export IP='$IP > $HOME/notes
+echo '#nmap -sC -sV -vv -oN $HOME/nmap/Initial $IP' >> $HOME/notes
+echo '#gobuster dir -u $IP -w /usr/share/wordlists/dirb/common.txt -s 200 -x php,html,txt,xml,sh,py -o buster/80dir.log' >> $HOME/notes
+echo '#gobuster dns domain.com -o buster/dom.log' >> $HOME/notes
+echo "#nikto -h $IP"
+echo "add machine name domain.htb to /etc/hosts (search to ensure named correct)"
+echo "#nikto -h domain.htb"
+echo "any problems kill VBoxClient clipboard etc."
