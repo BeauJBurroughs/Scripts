@@ -1,9 +1,13 @@
 #!/bin/bash
-# to run [. setup] without brackets
+# set box name, IP and ostype
+BOXNAME=Intelligence
+LAST=248
+OS=win
 
-export IP=10.10.10.210                          #enter box IP
-export HOME=/home/kali/hackthebox/Reel2         #enter box Name
-
+export IP=10.10.10.$LAST                           #enter box IP
+export SELF=`hostname -I | awk '{print $2}'`
+export HOME=/home/kali/hackthebox/$BOXNAME          #enter box Name
+export SELF=$(hostname -I | awk '{print$2}')
 
 read -p "Press [Enter] key if this is first run"
 read -p "Are you sure this is the first run?"
@@ -14,14 +18,21 @@ mkdir $HOME
 mkdir $HOME/nmap
 mkdir $HOME/buster
 mkdir $HOME/www
+mkdir $HOME/$BOXNAME
 touch $HOME/notes
-#script = autostabalize_shell script 
-cp /home/kali/script /$HOME/
 
-cp /home/kali/Downloads/privilege-escalation-awesome-scripts-suite/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe /$HOME/www
-cp /home/kali/Downloads/privilege-escalation-awesome-scripts-suite/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe /$HOME/www
-cp /home/kali/Downloads/privilege-escalation-awesome-scripts-suite/winPEAS/winPEASbat/winPEAS.bat /$HOME/www
-cp /home/kali/Downloads/privilege-escalation-awesome-scripts-suite/linPEAS/linpeas.sh /$HOME/www/
+# copy windows specif scripts to windows box or linux specific to linux box
+cp /opt/Scripts/auto_stabilize_shell.sh /$HOME/
+cp /home/kali/.bashrc /$HOME/
+if [[ "$OS" == "win" ]]; then
+    cp /opt/PEASS-ng/winPEAS/winPEASexe/binaries/Release/winPEASany.exe /$HOME/www
+    cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat /$HOME/www
+    cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe /$HOME/www
+else
+    cp /opt/PEASS-ng/linPEAS/linpeas.sh /$HOME/www/
+    cp /opt/pspy64s /$HOME/www/
+fi
+
 echo '#export IP='$IP > $HOME/notes
 echo '#nmap -sC -sV -vv -oN $HOME/nmap/Initial $IP' >> $HOME/notes
 echo '#gobuster dir -u $IP -w /usr/share/wordlists/dirb/common.txt -s 200 -x php,html,txt,xml,sh,py -o buster/80dir.log' >> $HOME/notes
@@ -30,3 +41,24 @@ echo "#nikto -h $IP"
 echo "add machine name domain.htb to /etc/hosts (search to ensure named correct)"
 echo "#nikto -h domain.htb"
 echo "any problems kill VBoxClient clipboard etc."
+
+# Build obsidian files for not keeping
+# Cover page
+echo '<p align="center">' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo '  <img  width=512 src="" />' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo '</p>' >> $HOME/$BOXNAME/000\ -\ Cover.md
+# loot page
+echo '# Creds' >> $HOME/$BOXNAME/00\ -\ Loot.md
+echo '| Username | Password | Description |' >> $HOME/$BOXNAME/00\ -\ Loot.md
+echo '| --- | --- | -- |' >> $HOME/$BOXNAME/00\ -\ Loot.md
+echo '| | | |' >> $HOME/$BOXNAME/00\ -\ Loot.md
+# Nmap page
+echo '# Nmap' >> $HOME/$BOXNAME/05\ -\ Nmap.md
+echo '| Port | Service | Description |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
+echo '| --- | --- | --- |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
+echo '| 22 | ssh | OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0) |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
+echo '| 80 | http | |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
+echo ' '
+echo 'Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel' >> $HOME/$BOXNAME/05\ -\ Nmap.md
+# Web enumeration page
+echo '# Web Enumeration' >> $HOME/$BOXNAME/10\ -\ Web\ Enumeration.md
