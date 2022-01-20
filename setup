@@ -3,9 +3,9 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Hancliffe
-LAST=115
-OS=win
+BOXNAME=Overflow
+LAST=119
+OS=linux
 
 export IP=10.10.11.$LAST                           #enter box IP
 export SELF=`hostname -I | awk '{print $2}'`
@@ -63,9 +63,9 @@ echo "(dont forget to rm reply)" >> $HOME/notes
 echo "Then can just scan port 6379 through 65535 etc." $HOME/notes
 # more ways to pivot
 echo "# 9510 and other ports through chisel" >> $HOME/notes
-echo "# On Kali"
+echo "# On Kali" >> $HOME/notes
 echo "kali@kali:~$ ./chisel server -p 9002 --reverse  " >> $HOME/notes
-echo "# On Windows"
+echo "# On Windows" >> $HOME/notes
 echo "./chisel client 10.10.14.128:9002 R:8080:localhost:8080 R:9510:localhost:9510 R:9512:localhost:9512" >> $HOME/notes
 echo "# if using metasploit" >> $HOME/notes
 echo "portfwd add -l 9510 -p 9510 -r 10.10.11.115" >> $HOME/notes
