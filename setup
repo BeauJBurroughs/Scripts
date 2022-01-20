@@ -3,9 +3,9 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Stacked
-LAST=112
-OS=linux
+BOXNAME=Hancliffe
+LAST=115
+OS=win
 
 export IP=10.10.11.$LAST                           #enter box IP
 export SELF=`hostname -I | awk '{print $2}'`
@@ -54,6 +54,21 @@ echo "#nikto -h $IP"
 echo "add machine name domain.htb to /etc/hosts (search to ensure named correct)"
 echo "#nikto -h domain.htb"
 echo "any problems kill VBoxClient clipboard etc."
+# cool way to pivot/scan 
+echo "really cool way to pivot/scan with nc" >> $HOME/notes
+echo "mkfifo reply" >> $HOME/notes
+echo "nc -klvnp 65535 < reply | nc 127.0.0.1 6739 > reply" >> $HOME/notes
+echo "(nc -klvnp <port to use> < reply | nc 127.0.0.1 <port interested in scanning etc> > reply)" >> $HOME/notes
+echo "(dont forget to rm reply)" >> $HOME/notes
+echo "Then can just scan port 6379 through 65535 etc." $HOME/notes
+# more ways to pivot
+echo "# 9510 and other ports through chisel" >> $HOME/notes
+echo "# On Kali"
+echo "kali@kali:~$ ./chisel server -p 9002 --reverse  " >> $HOME/notes
+echo "# On Windows"
+echo "./chisel client 10.10.14.128:9002 R:8080:localhost:8080 R:9510:localhost:9510 R:9512:localhost:9512" >> $HOME/notes
+echo "# if using metasploit" >> $HOME/notes
+echo "portfwd add -l 9510 -p 9510 -r 10.10.11.115" >> $HOME/notes
 
 # Build obsidian files for not keeping
 # Cover page
