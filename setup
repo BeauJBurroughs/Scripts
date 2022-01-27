@@ -3,8 +3,8 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Overflow
-LAST=119
+BOXNAME=Toby
+LAST=121
 OS=linux
 
 export IP=10.10.11.$LAST                           #enter box IP
@@ -60,7 +60,7 @@ echo "mkfifo reply" >> $HOME/notes
 echo "nc -klvnp 65535 < reply | nc 127.0.0.1 6739 > reply" >> $HOME/notes
 echo "(nc -klvnp <port to use> < reply | nc 127.0.0.1 <port interested in scanning etc> > reply)" >> $HOME/notes
 echo "(dont forget to rm reply)" >> $HOME/notes
-echo "Then can just scan port 6379 through 65535 etc." $HOME/notes
+echo "Then can just scan port 6379 through 65535 etc." >> $HOME/notes
 # more ways to pivot
 echo "# 9510 and other ports through chisel" >> $HOME/notes
 echo "# On Kali" >> $HOME/notes
