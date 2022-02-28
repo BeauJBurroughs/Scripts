@@ -3,8 +3,8 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Toby
-LAST=121
+BOXNAME=update_script
+LAST=143
 OS=linux
 
 export IP=10.10.11.$LAST                           #enter box IP
@@ -30,12 +30,15 @@ touch $HOME/.hushlogin
 cp /opt/Scripts/auto_stabilize_shell.sh /$HOME/
 cp /home/kali/.bashrc /$HOME/
 if [[ "$OS" == "win" ]]; then
-    cp /opt/PEASS-ng/winPEAS/winPEASexe/binaries/Release/winPEASany.exe /$HOME/www
-    cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat /$HOME/www
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe -o /$HOME/www/winPEASany.exe
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat -o /$HOME/www/winPEAS.bat
+    chmod +x /$HOME/www/*
     cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe /$HOME/www
 else
-    cp /opt/PEASS-ng/linPEAS/linpeas.sh /$HOME/www/
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o /$HOME/www/linpeas_linux_amd64
     cp /opt/pspy64s /$HOME/www/
+    chmod +x /$HOME/www/*
 fi
 
 echo '#export IP='$IP > $HOME/notes
@@ -69,7 +72,7 @@ echo "# On Windows" >> $HOME/notes
 echo "./chisel client 10.10.14.128:9002 R:8080:localhost:8080 R:9510:localhost:9510 R:9512:localhost:9512" >> $HOME/notes
 echo "# if using metasploit" >> $HOME/notes
 echo "portfwd add -l 9510 -p 9510 -r 10.10.11.115" >> $HOME/notes
-
+echo "check this out - git clone https://github.com/Flangvik/SharpCollection.git for windows sharp binaries" >> $HOME/notes
 # Build obsidian files for not keeping
 # Cover page
 echo '<p align="center">' >> $HOME/$BOXNAME/000\ -\ Cover.md
