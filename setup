@@ -29,7 +29,7 @@ touch $HOME/.hushlogin
 # copy windows specif scripts to windows box or linux specific to linux box
 cp /opt/Scripts/auto_stabilize_shell.sh /$HOME/
 cp /home/kali/.bashrc /$HOME/
-cp /home/kali/.bash_aliases/$HOME/
+cp /home/kali/.bash_aliases /$HOME/
 if [[ "$OS" == "win" ]]; then
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe -o /$HOME/www/winPEASany.exe
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat -o /$HOME/www/winPEAS.bat
