@@ -3,8 +3,8 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=update_script
-LAST=143
+BOXNAME=RouterSpace
+LAST=148
 OS=linux
 
 export IP=10.10.11.$LAST                           #enter box IP
@@ -29,16 +29,20 @@ touch $HOME/.hushlogin
 # copy windows specif scripts to windows box or linux specific to linux box
 cp /opt/Scripts/auto_stabilize_shell.sh /$HOME/
 cp /home/kali/.bashrc /$HOME/
+cp /home/kali/.bash_aliases/$HOME/
 if [[ "$OS" == "win" ]]; then
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe -o /$HOME/www/winPEASany.exe
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat -o /$HOME/www/winPEAS.bat
     chmod +x /$HOME/www/*
+    #cp /opt/PEASS-ng/winPEAS/winPEASexe/binaries/Release/winPEASany.exe /$HOME/www
+    #cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat /$HOME/www
     cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe /$HOME/www
 else
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o /$HOME/www/linpeas_linux_amd64
-    cp /opt/pspy64s /$HOME/www/
     chmod +x /$HOME/www/*
+    #cp /opt/PEASS-ng/linPEAS/linpeas.sh /$HOME/www/
+    cp /opt/pspy64s /$HOME/www/
 fi
 
 echo '#export IP='$IP > $HOME/notes
