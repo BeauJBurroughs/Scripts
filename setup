@@ -3,8 +3,8 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=RouterSpace
-LAST=148
+BOXNAME=Undetected
+LAST=146
 OS=linux
 
 export IP=10.10.11.$LAST                           #enter box IP
@@ -12,10 +12,19 @@ export SELF=`hostname -I | awk '{print $2}'`
 export HOME=/home/kali/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print$2}')
 
+#start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
+#and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will pay with later.. 
+# the current working vault = 
+#/opt/obsidian/Obsidian-0.11.5.AppImage &>/dev/null &
+
+
+
 read -p "Press [Enter] key if this is first run"
 read -p "Are you sure this is the first run?"
 ## Bash add pause prompt for 5 seconds ##
 read -t 5 -p "I am going to wait for 5 seconds only ..."
+
+
 #only run if first time or will lose all work
 mkdir $HOME
 mkdir $HOME/nmap
@@ -61,6 +70,7 @@ echo "#nikto -h $IP"
 echo "add machine name domain.htb to /etc/hosts (search to ensure named correct)"
 echo "#nikto -h domain.htb"
 echo "any problems kill VBoxClient clipboard etc."
+
 # cool way to pivot/scan 
 echo "really cool way to pivot/scan with nc" >> $HOME/notes
 echo "mkfifo reply" >> $HOME/notes
@@ -77,6 +87,8 @@ echo "./chisel client 10.10.14.128:9002 R:8080:localhost:8080 R:9510:localhost:9
 echo "# if using metasploit" >> $HOME/notes
 echo "portfwd add -l 9510 -p 9510 -r 10.10.11.115" >> $HOME/notes
 echo "check this out - git clone https://github.com/Flangvik/SharpCollection.git for windows sharp binaries" >> $HOME/notes
+echo "/opt/obsidian/Obsidian-0.11.5.AppImage &>/dev/null &" >> $HOME/notes
+
 # Build obsidian files for not keeping
 # Cover page
 echo '<p align="center">' >> $HOME/$BOXNAME/000\ -\ Cover.md
@@ -97,3 +109,4 @@ echo ' '
 echo 'Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel' >> $HOME/$BOXNAME/05\ -\ Nmap.md
 # Web enumeration page
 echo '# Web Enumeration' >> $HOME/$BOXNAME/10\ -\ Web\ Enumeration.md
+
