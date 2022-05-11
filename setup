@@ -3,8 +3,8 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Undetected
-LAST=146
+BOXNAME=Scanned
+LAST=141
 OS=linux
 
 export IP=10.10.11.$LAST                           #enter box IP
@@ -88,6 +88,9 @@ echo "# if using metasploit" >> $HOME/notes
 echo "portfwd add -l 9510 -p 9510 -r 10.10.11.115" >> $HOME/notes
 echo "check this out - git clone https://github.com/Flangvik/SharpCollection.git for windows sharp binaries" >> $HOME/notes
 echo "/opt/obsidian/Obsidian-0.11.5.AppImage &>/dev/null &" >> $HOME/notes
+echo "for nishang antivirus evasion, just replace the Invoke-PowershellTcp with anything" >> $HOME/notes
+echo "and replace sendback with anything, and it should replace sendback and sendback2" >> $HOME/notes
+echo "and for the oneliner, split it to individual lines after every semicolon (;) , or just at after the {0};" >> $HOME/notes 
 
 # Build obsidian files for not keeping
 # Cover page
@@ -109,4 +112,3 @@ echo ' '
 echo 'Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel' >> $HOME/$BOXNAME/05\ -\ Nmap.md
 # Web enumeration page
 echo '# Web Enumeration' >> $HOME/$BOXNAME/10\ -\ Web\ Enumeration.md
-
