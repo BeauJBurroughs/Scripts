@@ -3,9 +3,9 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Scanned
-LAST=141
-OS=linux
+BOXNAME=Timelapse
+LAST=152
+OS=win
 
 export IP=10.10.11.$LAST                           #enter box IP
 export SELF=`hostname -I | awk '{print $2}'`
@@ -97,6 +97,12 @@ echo "and for the oneliner, split it to individual lines after every semicolon (
 echo '<p align="center">' >> $HOME/$BOXNAME/000\ -\ Cover.md
 echo '  <img  width=1024 src="" />' >> $HOME/$BOXNAME/000\ -\ Cover.md
 echo '</p>' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo ' ' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo '# Path of Exploitation' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo 'Foothold:' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo 'User:'  >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo 'root:' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo ' ' >> $HOME/$BOXNAME/000\ -\ Cover.md
 # loot page
 echo '# Creds' >> $HOME/$BOXNAME/00\ -\ Loot.md
 echo '| Username | Password | Description |' >> $HOME/$BOXNAME/00\ -\ Loot.md
