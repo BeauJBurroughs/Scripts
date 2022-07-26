@@ -3,9 +3,9 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Timelapse
-LAST=152
-OS=win
+BOXNAME=Talkative
+LAST=155
+OS=linux
 
 export IP=10.10.11.$LAST                           #enter box IP
 export SELF=`hostname -I | awk '{print $2}'`
@@ -36,23 +36,24 @@ touch $HOME/.hushlogin
 
 
 # copy windows specif scripts to windows box or linux specific to linux box
-cp /opt/Scripts/auto_stabilize_shell.sh /$HOME/
-cp /home/kali/.bashrc /$HOME/
-cp /home/kali/.bash_aliases /$HOME/
+cp /opt/Scripts/auto_stabilize_shell.sh $HOME/
+cp /opt/Scripts/.bashrc $HOME/
+cp /opt/Scripts/.bash_aliases $HOME/
+cp /opt/Scripts/.tmux.conf $HOME/
 if [[ "$OS" == "win" ]]; then
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe -o /$HOME/www/winPEASany.exe
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat -o /$HOME/www/winPEAS.bat
-    chmod +x /$HOME/www/*
-    #cp /opt/PEASS-ng/winPEAS/winPEASexe/binaries/Release/winPEASany.exe /$HOME/www
-    #cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat /$HOME/www
-    cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe /$HOME/www
+    #curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe -o $HOME/www/winPEASany.exe
+    #curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat -o $HOME/www/winPEAS.bat
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/download/20220626/winPEASx64.exe -o $HOME/www/winpeas.exe
+    #cp /opt/PEASS-ng/winPEAS/winPEASexe/binaries/Release/winPEASany.exe $HOME/www
+    #cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat $HOME/www
+    cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe $HOME/www
 else
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o /$HOME/www/linpeas_linux_amd64
-    chmod +x /$HOME/www/*
-    #cp /opt/PEASS-ng/linPEAS/linpeas.sh /$HOME/www/
-    cp /opt/pspy64s /$HOME/www/
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o $HOME/www/linpeas_linux_amd64
+    #cp /opt/PEASS-ng/linPEAS/linpeas.sh $HOME/www/
+    cp /opt/pspy64s $HOME/www/
 fi
+chmod +x $HOME/www/*
 
 echo '#export IP='$IP > $HOME/notes
 echo '#masscan -p1-65535,U:1-65535 $IP --rate=1000 -e tun0' >> $HOME/notes
@@ -94,7 +95,7 @@ echo "# Windows Sharp Binaries" >> $HOME/notes
 echo "check this out - git clone https://github.com/Flangvik/SharpCollection.git for windows sharp binaries" >> $HOME/notes
 # Run Obsidian in background
 echo "# Run Obsidian" >> $HOME/notes
-echo "/opt/obsidian/Obsidian-0.11.5.AppImage &>/dev/null &" >> $HOME/notes
+echo "/opt/obsidian/Obsidian-0.15.8.AppImage &>/dev/null &" >> $HOME/notes
 # AntiVirus Evasion
 echo "# Anti Virus Evasion" >> $HOME/notes
 echo "for nishang antivirus evasion, just replace the Invoke-PowershellTcp with anything" >> $HOME/notes
