@@ -3,14 +3,14 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Analytics
-LAST=234
-OS=lin
+BOXNAME=Manager
+LAST=
+OS=win
 USER=bob
 
-export IP=10.10.11.$LAST
+export IP=1.2.3.4	#.$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
-export SELF=$(hostname -I | awk '{print $5}')
+export SELF=$(hostname -I | awk '{print $4}')
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
 #and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
@@ -103,7 +103,7 @@ echo "" >> $HOME/notes
 echo '# Windows privesc checklist' >> $HOME/notes
 echo 'https://book.hacktricks.xyz/windows-hardening/checklist-windows-privilege-escalation' >> $HOME/notes
 
-# linux prives checklist
+# linux privesc checklist
 echo "" >> $HOME/notes
 echo '# linux privesc checklist' >> $HOME/notes
 echo 'https://book.hacktricks.xyz/linux-hardening/linux-privilege-escalation-checklist' >> $HOME/notes
@@ -152,6 +152,7 @@ echo "socat TCP4-LISTEN:4444,fork EXEC:/bin/bash" >> $HOME/notes
 echo "socat tcp-listen:7777,reuseaddr,fork exec:cat,nofork" >> $HOME/notes
 echo "socat tcp-l:9999,reuseaddr,fork EXEC:./leak" >> $HOME/notes
 echo "socat -U TCP-LISTEN:5403,fork EXEC:'/usr/bin/data',stderr,pty,echo=0" >> $HOME/notes
+echo "socat tcp-l:5000,reuseaddr,fork EXEC:\"./vuln\",pty,stderr" >> $HOME/notes
 echo "ncat -l 1234 -c '/usr/bin/data' --keep-open" >> $HOME/notes
 echo "nc -lvnp 9999 -e '/usr/local/bin'" >> $HOME/notes
 echo "## create named pipe" >> $HOME/notes
