@@ -3,18 +3,18 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Manager
+BOXNAME=Hospital
 LAST=
 OS=win
 USER=bob
 
-export IP=1.2.3.4	#.$LAST
+export IP=	#10.10.11.$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print $4}')
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
 #and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
-# the current working vault = 
+# the current working vault =
 #/opt/obsidian/Obsidian-0.11.5.AppImage &>/dev/null &
 
 #read "Press [Enter] key if this is first run"
@@ -48,6 +48,10 @@ if [[ "$OS" == "win" ]]; then
     #cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat $HOME/www
     #cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe $HOME/www
     cp /usr/share/windows-resources/binaries/nc.exe $HOME/www
+    cp /opt/ConPtyShell/shell.ps1  $HOME/www
+    cp /opt/ConPtyShell/ConPtyShell.cs $HOME/www
+    cp /opt/RunasCs/RunasCs.exe $HOME/www
+
 else
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o $HOME/www/linpeas_linux_amd64
