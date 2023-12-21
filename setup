@@ -10,7 +10,7 @@ USER=bob
 
 export IP=10.10.11.$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
-export SELF=$(hostname -I | awk '{print $6}')
+export SELF=$(hostname -I | awk '{print $4}')
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
 #and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
