@@ -3,14 +3,14 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Mailing
+BOXNAME=MagicGardens
 LAST=
-OS=win
+OS=lin
 USER=bob
 
-export IP=10.129.58.37	#10.10.11.$LAST
+export IP=	#10.10.11.$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
-export SELF=$(hostname -I | awk '{print $5}')
+export SELF=$(hostname -I | awk '{print $4}')
 export HTB_TOKEN=$(cat /opt/Scripts/.HTB_TOKEN)
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
