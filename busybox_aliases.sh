@@ -3,7 +3,7 @@
 ## to use this copy busybox_static binary to machine 
 ##then either change the name of busybox_static to busybox, or create an alias to the location of busybox
 ## ex. alias busybox='/var/www/html/blah/blah/blah/executable/folder/busybox_static'
-##then copy and paste this into the terminal to set up all the alias' or run it if possible.
+##then copy and paste this into the terminal to set up all the alias' or run it if possible.  source ./busybox_aliases.sh or . $(pwd)/busybox_aliases.sh
 alias [='busybox_static ['
 alias [[='busybox_static [['
 alias acpid='busybox_static acpid'
