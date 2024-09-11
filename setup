@@ -50,6 +50,7 @@ if [[ "$OS" == "win" ]]; then
     #cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe $HOME/www
     cp /usr/share/windows-resources/binaries/nc.exe $HOME/www
     cp /opt/ConPtyShell/shell.ps1  $HOME/www
+    cp /opt/ConPtyShell/ConPtyShell.exe $HOME/www
     cp /opt/ConPtyShell/ConPtyShell.cs $HOME/www
     cp /opt/RunasCs/RunasCs.exe $HOME/www
 
@@ -123,7 +124,8 @@ echo "Invoke-Command -Computer dc01 -ScriptBlock { C:\blah.exe } -asJob" >> $HOM
 echo "Invoke-Command -scriptblock { script }  -asJob -computername localhost" >> $HOME/notes
 echo "Start-Job -scriptblock { script }" >> $HOME/notes
 echo "Start-Process powershell {script}" >> $HOME/notes
-
+echo "Get-Process <name>" >> $HOME/notes
+echo "Stop-Process <pid>" >> $HOME/notes
 
 # Windows privesc checklist
 echo "" >> $HOME/notes
