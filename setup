@@ -3,12 +3,12 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Infiltrator
-LAST=
-OS=win
+BOXNAME=Sightless
+LAST=32
+OS=linux
 USER=bob
 
-export IP=10.129.14.138                      #$LAST
+export IP=10.10.11.$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print $5}')
 export HTB_TOKEN=$(cat /opt/Scripts/.HTB_TOKEN)
