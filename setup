@@ -3,15 +3,16 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Sightless
-LAST=32
+BOXNAME=Caption
+LAST=
 OS=linux
 USER=bob
 
-export IP=10.10.11.$LAST
+export IP=192.168.1.1					#$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print $5}')
 export HTB_TOKEN=$(cat /opt/Scripts/.HTB_TOKEN)
+export BOXNAME=$BOXNAME
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
 #and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
@@ -261,4 +262,27 @@ echo 'Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel' >> $HOME/$BOXNAME
 echo '# Web Enumeration' >> $HOME/$BOXNAME/10\ -\ Web\ Enumeration.md
 
 # View notes
-cat $HOME/notes
+#cat $HOME/notes
+# script to setup my tmux environment
+cd
+tmux new-session -d
+# stay in first windows
+tmux split-window -v -d
+tmux send-keys 'nmapfull' Enter
+# split h and stay in first window
+tmux split-window -h -d
+#send keys to the new split window
+tmux send-keys -t %2 'cd www/;clear' Enter
+tmux send-keys -t %2 'python3 -m http.server 80' Enter
+tmux split-window -h -t %1 -d
+tmux send-keys -t %1 'nmapudp' Enter
+tmux new-window -d
+tmux send-keys -t @1 'cd $BOXNAME;nano "10 - Web Enumeration.md"' Enter
+tmux new-window -d
+tmux send-keys -t @2 'feroxbuster -u http://$IP -w  /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt --thorough'
+tmux new-window -d
+tmux send-keys -t @3 'ffuf -u http://$IP -H "Host: FUZZ.$BOXNAME.htb" -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt -mc all'
+#tmux send-keys 'C-b'
+#tmux list-panes
+#tmux list-windows
+tmux a -t 0
