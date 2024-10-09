@@ -3,12 +3,12 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Caption
+BOXNAME=EvilCUPS
 LAST=
-OS=linux
+OS=lin
 USER=bob
 
-export IP=192.168.1.1					#$LAST
+export IP=					#$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print $5}')
 export HTB_TOKEN=$(cat /opt/Scripts/.HTB_TOKEN)
@@ -232,8 +232,39 @@ echo "" >> $HOME/notes
 echo "# OverlayFS and GameOverlay" >> $HOME/notes
 echo "https://www.reddit.com/r/selfhosted/comments/15ecpck/ubuntu_local_privilege_escalation_cve20232640/" >> $HOME/notes
 echo "https://github.com/briskets/CVE-2021-3493" >> $HOME/notes
+# LFI and Directory Traversal
+echo "" >> $HOME/notes
+echo "# LFI and Directory Traversal" >> $HOME/notes
+echo "# ../../etc/passwd (dots and filenames)" >> $HOME/notes
+echo "directory traversal/intruder" >> $HOME/notes
+echo "  directory_traversal.txt:140" >> $HOME/notes
+echo "  dotdotpwn.txt:21144" >> $HOME/notes
+echo "File Inclusion/Intruders" >> $HOME/notes
+echo "  Traversal.txt:4521" >> $HOME/notes
+echo "# ../../{FILES} (:%s/{FILES}//g --> page=FUZZ1FUZZ2 -w deep_traversal.txt:FUZZ1 -w list2:FUZZ2)" >> $HOME/notes
+echo "directory traversal/intruder" >> $HOME/notes
+echo "  deep_traversal.txt:878" >> $HOME/notes
+echo "  traversals-8-deep-exotic-encodings.txt:887" >> $HOME/notes
+echo "# /etc/passwd (just files to search for not dots)" >> $HOME/notes
+echo "file inclusion/intruders" >> $HOME/notes
+echo "  BSD-files.txt:12" >> $HOME/notes
+echo "  LFI-FD-check.txt:38" >> $HOME/notes
+echo "  LFI-WindowsFileCheck.txt:69" >> $HOME/notes
+echo "  Linux-files.txt:61" >> $HOME/notes
+echo "  List_Of_File_To_Include_NullByteAdded.txt:318" >> $HOME/notes
+echo "  List_Of_File_To_Include.txt:911" >> $HOME/notes
+echo "  Mac-files.txt:7" >> $HOME/notes
+echo "  simple-check.txt:9" >> $HOME/notes
+echo "  Web-files.txt:13" >> $HOME/notes
+echo "  Windows-files.txt:212" >> $HOME/notes
+echo "# ../../ (just dots)" >> $HOME/notes
+echo "file inclusion/intruders" >> $HOME/notes
+echo "  dot-slash-PathTraversal_and_LFI_pairing.txt:885" >> $HOME/notes
+echo "# ../../ or ../../etc/passwd (both dots and just files and dots with files)" >> $HOME/notes
+echo "file inclusion/intruders" >> $HOME/notes
+echo "  JHADDIX_LFI.txt:879" >> $HOME/notes
 
-# Build obsidian files for not keeping
+# Build obsidian files for note keeping
 # Cover page
 echo '<p align="center">' >> $HOME/$BOXNAME/000\ -\ Cover.md
 echo '  <img  width=1024 src="" />' >> $HOME/$BOXNAME/000\ -\ Cover.md
