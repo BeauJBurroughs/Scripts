@@ -3,12 +3,12 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=EvilCUPS
+BOXNAME=Mist
 LAST=
 OS=lin
 USER=bob
 
-export IP=					#$LAST
+export IP=10.10.11.17			#$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print $5}')
 export HTB_TOKEN=$(cat /opt/Scripts/.HTB_TOKEN)
@@ -54,7 +54,7 @@ if [[ "$OS" == "win" ]]; then
     cp /opt/ConPtyShell/ConPtyShell.exe $HOME/www
     cp /opt/ConPtyShell/ConPtyShell.cs $HOME/www
     cp /opt/RunasCs/RunasCs.exe $HOME/www
-
+    cp /opt/SharpExclusionFinder.exe $HOME/www
 else
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o $HOME/www/linpeas_linux_amd64
@@ -216,6 +216,11 @@ echo "and replace sendback with anything, and it should replace sendback and sen
 echo "and for the oneliner, split it to individual lines after every semicolon (;) , or just at after the {0};" >> $HOME/notes 
 echo "## Conptyshell" >> $HOME/notes
 echo "for conpty shell replace the name invoke-conptyshell and conptyshell and remove the how to use section" >>$HOME/notes
+echo "[defender exclusions](https://blog.fndsec.net/2024/10/04/uncovering-exclusion-paths-in-microsoft-defender-a-security-research-insight/)" >> $HOME/notes
+echo "Get-MPPreference | select-object ExclusionPath" >> $HOME/notes
+echo "Get-WinEvent -LogName \"Microsoft-Windows-Windows Defender/Operational\" -FilterXPath \"*[System[(EventID=5007)]]\" | Where-Object { $_.Message -like \"*exclusion\Path*\" } | Select-Object Message | FL" >> $HOME/notes
+echo "& \"C:\Program Files\Windows Defender\MpCmdRun.exe\" -Scan -ScanType 3 -File \"C:\folder_to_check\|*\"" >> $HOME/notes
+
 # Fileless elf execution
 echo "" >> $HOME/notes
 echo "# Fileless elf execution" >> $HOME/notes
