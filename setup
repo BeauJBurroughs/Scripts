@@ -225,6 +225,8 @@ echo "[defender exclusions](https://blog.fndsec.net/2024/10/04/uncovering-exclus
 echo "Get-MPPreference | select-object ExclusionPath" >> $HOME/notes
 echo "Get-WinEvent -LogName \"Microsoft-Windows-Windows Defender/Operational\" -FilterXPath \"*[System[(EventID=5007)]]\" | Where-Object { $_.Message -like \"*exclusion\Path*\" } | Select-Object Message | FL" >> $HOME/notes
 echo "& \"C:\Program Files\Windows Defender\MpCmdRun.exe\" -Scan -ScanType 3 -File \"C:\folder_to_check\|*\"" >> $HOME/notes
+echo "https://medium.com/@lsecqt/creating-fully-undetectable-payload-fud-with-c-46a734837d1c" >> $HOME/notes
+echo "https://s3cur3th1ssh1t.github.io/Building-a-custom-Mimikatz-binary/" >> $HOME/notes
 
 # Fileless elf execution
 echo "" >> $HOME/notes
