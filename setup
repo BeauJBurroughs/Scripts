@@ -55,6 +55,7 @@ if [[ "$OS" == "win" ]]; then
     cp /opt/ConPtyShell/ConPtyShell.cs $HOME/www
     cp /opt/RunasCs/RunasCs.exe $HOME/www
     cp /opt/SharpExclusionFinder.exe $HOME/www
+    cp /opt/Scripts/shell.c $HOME/www
 else
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o $HOME/www/linpeas_linux_amd64
