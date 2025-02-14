@@ -133,6 +133,13 @@ echo "" >> $HOME/notes
 echo "# fix encoding problems " >> $HOME/notes
 echo 'iconv -f utf-16le -t utf-8 lin.log -o lin2.log' >> $HOME/notes
 echo "gc rev.bat|set-content rev2.bat -encoding ascii" >> $HOME/notes
+echo "dos2unix file && vim --clean file" >> $HOME/notes
+
+# Create/read QRCodes
+echo "" >> $HOME/notes
+echo "# Create and read QRCodes" >> $HOME/notes
+echo "qrencode -o output.png -s 10 "mymessage" >> $HOME/notes
+echo "zbarimg output.png" >> $HOME/notes
 
 # Windows privesc checklist
 echo "" >> $HOME/notes
