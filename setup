@@ -7,10 +7,11 @@ BOXNAME=Vintage
 LAST=
 OS=win
 USER=bob
+TUNINDEX=5
 
 export IP=10.129.37.174			#$LAST
 export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
-export SELF=$(hostname -I | awk '{print $5}')
+export SELF=$(hostname -I | awk '{print $'$TUNINDEX'}')
 export HTB_TOKEN=$(cat /opt/Scripts/.HTB_TOKEN)
 export BOXNAME=$BOXNAME
 
@@ -63,6 +64,7 @@ if [[ "$OS" == "win" ]]; then
     cp /opt/SharpExclusionFinder/SharpExclusionFinder.exe $HOME/www
     cp /opt/Scripts/shell.c $HOME/www
     cp /opt/Scripts/sslshell.ps1 $HOME/www
+    cp /opt/Scripts/put_server1.py $HOME/www
 else
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
     curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o $HOME/www/linpeas_linux_amd64
@@ -331,7 +333,7 @@ tmux send-keys 'nmapfull' Enter
 tmux split-window -h -d
 #send keys to the new split window
 tmux send-keys -t %2 'cd www/;clear' Enter
-tmux send-keys -t %2 'python3 -m http.server 80' Enter
+tmux send-keys -t %2 'sudo python3 -m http.server 80' Enter
 tmux split-window -h -t %1 -d
 tmux send-keys -t %1 'nmapudp' Enter
 tmux new-window -d
@@ -340,6 +342,8 @@ tmux new-window -d
 tmux send-keys -t @2 'feroxbuster -u http://$IP -w  /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt --thorough'
 tmux new-window -d
 tmux send-keys -t @3 'ffuf -u http://$IP -H "Host: FUZZ.$BOXNAME.htb" -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt -mc all'
+tmux new-window -d
+tmux send-keys -t @4 '/home/$USER/BurpSuiteCommunity/BurpSuiteCommunity' Enter
 #tmux send-keys 'C-b'
 #tmux list-panes
 #tmux list-windows
