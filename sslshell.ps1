@@ -1,5 +1,5 @@
 param (
-    # rlwrap -cAr ncat --ssl -lvnp 8022
+    # rlwrap -cAr ncat --ssl -lvnp REPLACE_THIS_PORT
     # height of largest column without top bar
     #[Parameter(Mandatory=$true)]
     [string]$ADDRESS = 'REPLACE_THIS_IP',
