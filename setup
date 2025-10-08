@@ -3,19 +3,41 @@
 # set box name, IP and ostype
 #for folder in $(ls /opt/); do cd /opt/$folder/; sudo git pull; done
 
-# Ensure IP argument is passed
-if [[ -z "$1" ]]; then
-    echo "Usage: . $0 /opt/Script/setup <target_ip>"
-    return 1
+# Enforce sourced (we must be sourced so we can change caller's HOME)
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  echo "ERROR: This script must be sourced, not executed."
+  echo "Usage (must be sourced):  . ${BASH_SOURCE[0]} <boxname> [OS:win|linux] <target_ip>"
+  exit 2
 fi
 
-BOXNAME=CodeTwo
-OS=lin
-USER=bob
+# Argument handling: accept 2 or 3 args
+if [ $# -lt 2 ] || [ $# -gt 3 ]; then
+  echo "Usage: . ${BASH_SOURCE[0]} <boxname> [OS:win|linux] <target_ip>"
+  return 1
+fi
+
+# Parse args:
+BOXNAME="$1"
+if [ $# -eq 2 ]; then
+  OS="linux"
+  IP="$2"
+else
+  OS="${2:-linux}"
+  IP="$3"
+fi
+
+USER="bob"
 TUNINDEX=3
 
-IP=$1
-HOME="/home/$USER/hackthebox/$BOXNAME"
+# Save original HOME so the caller can restore if desired
+if [ -z "${OLD_HOME+x}" ]; then
+  OLD_HOME="${HOME}"
+  export OLD_HOME
+fi
+
+# Set HOME to box-specific home
+HOME="/home/${USER}/hackthebox/${BOXNAME}"
+
 SELF="$(hostname -I | awk '{print $'$TUNINDEX'}')"
 HTB_TOKEN="$(cat /opt/Scripts/.HTB_TOKEN)"
 
@@ -96,8 +118,20 @@ sed -i "s/REPLACE_THIS_IP/$SELF/g" "$HOME/www/sslshell.ps1"
 sed -i 's/REPLACE_THIS_PORT/9001/g' "$HOME/www/sslshell.ps1"
 sed -i "s/REPLACE_THIS_IP/$SELF/g" "$HOME/www/root.c"
 
+restore_home() {
+  if [ -n "${OLD_HOME+x}" ]; then
+    HOME="${OLD_HOME}"
+    export HOME
+    unset OLD_HOME
+    echo "HOME restored to ${HOME}"
+  else
+    echo "OLD_HOME not set — nothing to restore."
+  fi
+}
+
 # Build notes
-cat << 'EOF' >> "$HOME/notes"
+build_notes() {
+  cat << 'EOF' >> "$HOME/notes"
 # Standard enumration
 export IP='$IP' > $HOME/notes
 masscan -p1-65535,U:1-65535 $IP --rate=1000 -e tun0
@@ -306,11 +340,14 @@ file inclusion/intruders
 file inclusion/intruders
   JHADDIX_LFI.txt:879
 EOF
+}
 
+build_notes
 
 # Build obsidian files for note keeping
 # Cover page
-cat << 'EOF' >> "$HOME/$BOXNAME/000 - Cover.md"
+build_cover_page() { 
+  cat << 'EOF' >> "$HOME/$BOXNAME/000 - Cover.md"
 <p align="center">
   <img  width=1024 src="" />
 </p>
@@ -320,17 +357,21 @@ cat << 'EOF' >> "$HOME/$BOXNAME/000 - Cover.md"
 * User:
 * root:
 EOF
+}
 
 # loot page
-cat << 'EOF' >> "$HOME/$BOXNAME/000 - Loot.md"
+build_loot_page() {
+  cat << 'EOF' >> "$HOME/$BOXNAME/000 - Loot.md"
 # Creds
 | Username | Password | Description |
 | --- | --- | -- |
 | | | |
 EOF
+}
 
 # Nmap page
-cat << 'EOF' >> "$HOME/$BOXNAME/05 - Nmap.md"
+build_nmap_page() {
+  cat << 'EOF' >> "$HOME/$BOXNAME/05 - Nmap.md"
 # Nmap
 | Port | Service | Description |
 | --- | --- | --- |
@@ -340,11 +381,22 @@ cat << 'EOF' >> "$HOME/$BOXNAME/05 - Nmap.md"
 
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 EOF
+}
 
 # Web enumeration page
-cat << 'EOF' >> "$HOME/$BOXNAME/10 - Web Enumeration.md"
+build_web_enumeration_page() {
+  cat << 'EOF' >> "$HOME/$BOXNAME/10 - Web Enumeration.md"
 # Web Enumeration
 EOF
+}
+
+build_obsidian_files() {
+  build_cover_page
+  build_loot_page
+  build_nmap_page
+  build_web_enumeration_page
+}
+build_obsidian_files
 
 # setup my tmux environment
 #                                                       ________________
@@ -414,7 +466,9 @@ tmux send-keys -t 5.0 C-l 'nc -klvnp 65535 > userlist.txt' C-m
 tmux send-keys -t 5.1 C-l 'nc localhost 65535' C-m
 tmux send-keys -t 5.2 C-l 'nc -klvnp 65534 > passlist.txt' C-m
 tmux send-keys -t 5.3 C-l 'nc localhost 65534' C-m
-tmux send-keys -t 5.4 C-l "while true; do /opt/nxc ssh $IP -u userlist.txt -p passlist.txt; done" C-m
+tmux send-keys -t 5.4 C-l "while true; do /opt/nxc ssh $IP -u userlist.txt -p passlist.txt; done"
 
 # Attach to the tmux session to view the panes.
 tmux a -t 0
+
+
