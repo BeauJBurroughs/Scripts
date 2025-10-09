@@ -125,7 +125,7 @@ setup_workspace() {
     curl -s -L https://github.com/antonioCoco/ConPtyShell/releases/latest/download/ConPtyShell.zip -o "$HOME/www/ConPtyShell.zip"
     unzip -qq $HOME/www/ConPtyShell.zip -d "$HOME/www/"
     rm "$HOME/www/"{ConPtyShell.zip,ConPtyShell_dotnet2.exe}
-    curl -s -L https://github.com/antonioCoco/RunasCs/releases/download/v1.5/RunasCs.zip -o $HOME/www/RunasCs.zip
+    curl -s -L https://github.com/antonioCoco/RunasCs/releases/latest/download/RunasCs.zip -o $HOME/www/RunasCs.zip
     unzip -qq $HOME/www/RunasCs.zip -d "$HOME/www/"
     rm "$HOME/www/"{RunasCs_net2.exe,RunasCs.zip}
     curl -s -L https://github.com/Friends-Security/SharpExclusionFinder/releases/latest/download/SharpExclusionFinder.exe -o "$HOME/www/SharpExclusionFinder.exe"
@@ -135,7 +135,7 @@ setup_workspace() {
 
     curl -s -L https://raw.githubusercontent.com/antonioCoco/ConPtyShell/refs/heads/master/Invoke-ConPtyShell.ps1 -o "$HOME/www/Invoke-ConPtyShell.ps1"
     curl -s -L https://gist.githubusercontent.com/BeauJBurroughs/319d4e67e421b909aa139402e2075c58/raw/56f4d8a5383b4aa2661b7eab30aaef5c1d3cd8ac/ConPtyShell.cs -o "$HOME/www/ConPtyShell.cs"
-    
+
     cp Scripts/sslshell.ps1 "$HOME/www"
     cp Scripts/put_server1.py "$HOME/www"
 
