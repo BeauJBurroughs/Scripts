@@ -110,7 +110,8 @@ setup_workspace() {
   cp Scripts/.tmux.conf "$HOME/"
   cp Scripts/.zshrc "$HOME/"
   cp Scripts/shell.c "$HOME/www"
-  
+  cp Scripts/RemotePE.exe "$HOME/www"
+
   if [[ "$OS" == 'win' ]]; then
     curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEAS.bat -o "$HOME/www/winPEAS.bat"
     curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/winPEASx64.exe -o "$HOME/www/winPEASx64.exe"
@@ -138,6 +139,7 @@ setup_workspace() {
 
     cp Scripts/sslshell.ps1 "$HOME/www"
     cp Scripts/put_server1.py "$HOME/www"
+    cp Scripts/put_server2.py "$HOME/www"
 
   else # linux specific setup
     curl -s -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh -o "$HOME/www/linpeas.sh"
@@ -204,6 +206,12 @@ modify_shells() {
   # dotnet new console -n ConPtyShell; cd ConPtyShell; mv ../ConPtyShell.cs Program.cs; 
   # dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true
   # mv bin/Release/net8.0/win-x64/publish/ConPtyShell.exe $HOME/www/ConPtyShell2.exe 
+
+  # Replace placeholder in put_server1.py
+  _sed_if_exists "$HOME/www/put_server1.py" "s|REPLACE_THIS_IP|$SELF|g"
+  # Replace placeholder in put_server2.py
+  _sed_if_exists "$HOME/www/put_server2.py" "s|REPLACE_THIS_IP|$SELF|g"
+
 
   echo "modify_shells: done (created $HOME/www/shell.sh and updated available templates)" 
 }

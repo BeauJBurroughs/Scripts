@@ -9,8 +9,8 @@ Usage::
 
 curl or wget can be used to send files with options similar to the following
 
-  curl -X PUT --upload-file somefile.txt http://localhost:8000
-  wget -O- --method=PUT --body-file=somefile.txt http://localhost:8000/somefile>
+  curl.exe -X PUT --upload-file win.log http://REPLACE_THIS_IP:8000
+  wget -O- --method=PUT --body-file=win.log http://REPLACE_THIS_IP:8000/win.log
 
 __Note__: curl automatically appends the filename onto the end of the URL so
 the path can be omitted.
