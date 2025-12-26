@@ -496,6 +496,7 @@ build_obsidian_files() {
 }
 build_obsidian_files
 
+
 # setup my tmux environment
 #                                                       ________________
 # window 0                                              |  %1  |  %2   |
@@ -560,11 +561,11 @@ tmux resize-pane -t 5.2 -U 7
 # Now, send commands to each pane.
 # C-l is Ctrl+l, which clears the screen.
 # C-m is Enter
-tmux send-keys -t 5.0 C-l 'nc -klvnp 65535 > userlist.txt' C-m
+tmux send-keys -t 5.0 C-l 'nc -klvnp 65535 >> userlist.txt' C-m
 tmux send-keys -t 5.1 C-l 'nc localhost 65535' C-m
-tmux send-keys -t 5.2 C-l 'nc -klvnp 65534 > passlist.txt' C-m
+tmux send-keys -t 5.2 C-l 'nc -klvnp 65534 >> passlist.txt' C-m
 tmux send-keys -t 5.3 C-l 'nc localhost 65534' C-m
-tmux send-keys -t 5.4 C-l "while true; do /opt/nxc ssh $IP -u userlist.txt -p passlist.txt; done"
+tmux send-keys -t 5.4 C-l "/opt/nxc ssh $IP -u userlist.txt -p passlist.txt"
 
 # Attach to the tmux session to view the panes.
 tmux a -t 0
